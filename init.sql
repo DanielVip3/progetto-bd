@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS Sala (
 
 
 -- -----------------------------------------------------
--- Tabelal Persona
+-- Tabella Persona
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS Persona (
   CodiceID INT UNSIGNED NOT NULL AUTO_INCREMENT,
