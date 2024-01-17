@@ -94,4 +94,16 @@ public class Database {
         statement.setInt(2, codiceID);
         statement.execute();
     }
+
+    public static void deleteFilm(int codice) throws SQLException {
+        PreparedStatement statement = getConnection().prepareStatement("DELETE FROM Film WHERE Codice = ?;");
+        statement.setInt(1, codice);
+        statement.execute();
+    }
+
+    public static void deletePersona(int codiceID) throws SQLException {
+        PreparedStatement statement = getConnection().prepareStatement("DELETE FROM Persona WHERE CodiceID = ?;");
+        statement.setInt(1, codiceID);
+        statement.execute();
+    }
 }

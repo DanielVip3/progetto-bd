@@ -6,10 +6,8 @@ import it.unisa.bd.progetto.core.Persona;
 import it.unisa.bd.progetto.core.TipoPersona;
 
 import javax.swing.*;
-import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,6 +34,7 @@ public class HomeForm {
     private JLabel searchLabel;
     private FilmTable filmTable;
     private PersoneTable personeTable;
+    private JButton deleteButton;
 
     public static void main(String[] args) throws SQLException {
         FlatMacLightLaf.setup();
@@ -49,14 +48,21 @@ public class HomeForm {
         frame.setSize(new Dimension(600, 450));
     }
 
-    private void populateCurrentSelectedPane(String search) {
+    private DatabaseTable getCurrentTable() {
         int selectedPane = tabbedPane.getSelectedIndex();
 
+        return switch (selectedPane) {
+            default -> filmTable;
+            case 1 -> personeTable;
+        };
+    }
+
+    private void populateCurrentSelectedPane(String search) {
+        DatabaseTable currentTable = getCurrentTable();
+
         try {
-            switch (selectedPane) {
-                case 0 -> filmTable.populate(Database.getFilms(search));
-                case 1 -> personeTable.populate(Database.getPersone(search));
-            }
+            if (currentTable instanceof FilmTable) currentTable.populate(Database.getFilms(search));
+            else if (currentTable instanceof PersoneTable) currentTable.populate(Database.getPersone(search));
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -107,6 +113,22 @@ public class HomeForm {
             public void stateChanged(ChangeEvent e) {
                 searchTextField.setText("");
                 populateCurrentSelectedPane(null);
+            }
+        });
+
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DatabaseTable currentTable = getCurrentTable();
+                int selectedRow = currentTable.getSelectedRow();
+                if (selectedRow < 0) return;
+
+                try {
+                    currentTable.delete(currentTable.getPrimaryKeyForRow(selectedRow));
+                    currentTable.removeRow(selectedRow);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
     }

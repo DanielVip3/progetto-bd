@@ -12,24 +12,6 @@ import java.sql.SQLException;
 import java.util.LinkedHashMap;
 
 public class FilmTable extends DatabaseTable {
-    CellEditorListener changeNotification = new CellEditorListener() {
-        public void editingCanceled(ChangeEvent e) {}
-        public void editingStopped(ChangeEvent e) {
-            TableCellEditor editor = (TableCellEditor) e.getSource();
-
-            String newValue = (String) editor.getCellEditorValue();
-            String databaseField = getDatabaseFieldFromColumn(getSelectedColumn());
-            int codice = getPrimaryKeyForRow(getSelectedRow());
-
-            try {
-                Database.updateFilm(codice, databaseField, newValue);
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                System.exit(1);
-            }
-        }
-    };
-
     public void initialize() {
         LinkedHashMap<String, String> columnFields = new LinkedHashMap<>();
         columnFields.put("Codice", "Codice");
@@ -54,5 +36,13 @@ public class FilmTable extends DatabaseTable {
         columnModel.getColumn(4).setCellRenderer(centerRenderer);
 
         getDefaultEditor(String.class).addCellEditorListener(changeNotification);
+    }
+
+    public void update(int primaryKey, String field, String newValue) throws SQLException {
+        Database.updateFilm(primaryKey, field, newValue);
+    }
+
+    public void delete(int primaryKey) throws SQLException {
+        Database.deleteFilm(primaryKey);
     }
 }

@@ -333,23 +333,37 @@
           </grid>
         </children>
       </tabbedpane>
-      <grid id="d0c83" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="2">
+      <grid id="d0c83" layout-manager="BorderLayout" hgap="0" vgap="0">
         <constraints border-constraint="South"/>
         <properties/>
         <border type="none"/>
         <children>
-          <component id="7f3b2" class="javax.swing.JLabel" binding="searchLabel">
-            <constraints/>
+          <component id="1bc35" class="javax.swing.JButton" binding="deleteButton">
+            <constraints border-constraint="West"/>
             <properties>
-              <text value=""/>
+              <horizontalAlignment value="0"/>
+              <text value="Cancella"/>
             </properties>
           </component>
-          <component id="d404b" class="javax.swing.JTextField" binding="searchTextField">
-            <constraints/>
-            <properties>
-              <columns value="20"/>
-            </properties>
-          </component>
+          <grid id="f6b42" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="2">
+            <constraints border-constraint="East"/>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="7f3b2" class="javax.swing.JLabel" binding="searchLabel">
+                <constraints/>
+                <properties>
+                  <text value=""/>
+                </properties>
+              </component>
+              <component id="d404b" class="javax.swing.JTextField" binding="searchTextField">
+                <constraints/>
+                <properties>
+                  <columns value="20"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
         </children>
       </grid>
     </children>

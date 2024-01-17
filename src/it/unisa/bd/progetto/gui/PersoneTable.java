@@ -12,24 +12,6 @@ import java.sql.SQLException;
 import java.util.LinkedHashMap;
 
 public class PersoneTable extends DatabaseTable {
-    public CellEditorListener changeNotification = new CellEditorListener() {
-        public void editingCanceled(ChangeEvent e) {}
-        public void editingStopped(ChangeEvent e) {
-            TableCellEditor editor = (TableCellEditor) e.getSource();
-
-            String newValue = (String) editor.getCellEditorValue();
-            String databaseField = getDatabaseFieldFromColumn(getSelectedColumn());
-            int codiceID = getPrimaryKeyForRow(getSelectedRow());
-
-            try {
-                Database.updatePersona(codiceID, databaseField, newValue);
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                System.exit(1);
-            }
-        }
-    };
-
     public void initialize() {
         LinkedHashMap<String, String> columnFields = new LinkedHashMap<>();
         columnFields.put("Codice ID", "CodiceID");
@@ -59,5 +41,13 @@ public class PersoneTable extends DatabaseTable {
         columnModel.getColumn(6).setCellRenderer(centerRenderer);
 
         getDefaultEditor(String.class).addCellEditorListener(changeNotification);
+    }
+
+    public void update(int primaryKey, String field, String newValue) throws SQLException {
+        Database.updatePersona(primaryKey, field, newValue);
+    }
+
+    public void delete(int primaryKey) throws SQLException {
+        Database.deletePersona(primaryKey);
     }
 }
