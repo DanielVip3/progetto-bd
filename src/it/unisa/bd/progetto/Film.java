@@ -15,6 +15,26 @@ public class Film {
         this.etaMinima = etaMinima;
     }
 
+    public String getCodice() {
+        return codice;
+    }
+
+    public String getTitolo() {
+        return titolo;
+    }
+
+    public short getAnno() {
+        return anno;
+    }
+
+    public short getDurata() {
+        return durata;
+    }
+
+    public short getEtaMinima() {
+        return etaMinima;
+    }
+
     public String[] toRow() {
         return new String[]{codice, titolo, String.valueOf(anno), String.valueOf(durata), String.valueOf(etaMinima)};
     }
