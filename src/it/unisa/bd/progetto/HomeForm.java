@@ -4,6 +4,7 @@ import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 import javax.swing.*;
 import javax.swing.table.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -32,6 +33,7 @@ public class HomeForm {
 
     public static void main(String[] args) throws SQLException {
         FlatMacLightLaf.setup();
+        UIManager.put("Table.alternateRowColor", new Color(215,225,238));
 
         JFrame frame = new JFrame("Cinema");
         frame.setContentPane(new HomeForm().root);
@@ -41,6 +43,8 @@ public class HomeForm {
     }
 
     private void initializeFilmTable() {
+        filmTable.setAutoCreateRowSorter(true);
+
         DefaultTableModel tableModel = new DefaultTableModel(new String[]{"Codice", "Titolo", "Anno", "Durata", "Età minima"}, 0);
         filmTable.setModel(tableModel);
 
@@ -59,6 +63,8 @@ public class HomeForm {
     }
 
     private void initializePersoneTable() {
+        personeTable.setAutoCreateRowSorter(true);
+
         DefaultTableModel tableModel = new DefaultTableModel(new String[]{"Codice ID", "Tipo", "Nome", "Cognome", "Data di nascita", "# premi vinti", "Matricola"}, 0);
         personeTable.setModel(tableModel);
 
