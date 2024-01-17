@@ -3,10 +3,7 @@ package it.unisa.bd.progetto.gui;
 import it.unisa.bd.progetto.core.Database;
 
 import javax.swing.*;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumnModel;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;

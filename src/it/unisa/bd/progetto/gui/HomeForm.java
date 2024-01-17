@@ -8,9 +8,13 @@ import it.unisa.bd.progetto.core.TipoPersona;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -35,6 +39,13 @@ public class HomeForm {
     private FilmTable filmTable;
     private PersoneTable personeTable;
     private JButton deleteButton;
+
+    private ListSelectionListener disableDeleteButtonIfNoSelection = new ListSelectionListener() {
+        public void valueChanged(ListSelectionEvent e) {
+            deleteButton.setEnabled(getCurrentTable().getSelectedRow() >= 0);
+        }
+    };
+
 
     public static void main(String[] args) throws SQLException {
         FlatMacLightLaf.setup();
@@ -131,5 +142,22 @@ public class HomeForm {
                 }
             }
         });
+
+        filmTable.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                filmTable.clearSelection();
+            }
+        });
+
+        personeTable.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                personeTable.clearSelection();
+            }
+        });
+
+        filmTable.getSelectionModel().addListSelectionListener(disableDeleteButtonIfNoSelection);
+        personeTable.getSelectionModel().addListSelectionListener(disableDeleteButtonIfNoSelection);
     }
 }

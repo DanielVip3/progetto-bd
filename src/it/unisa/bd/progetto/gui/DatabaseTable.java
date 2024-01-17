@@ -33,6 +33,7 @@ public abstract class DatabaseTable extends JTable {
     protected void initialize(Map<String, String> columnNames) {
         columnsFields = columnNames;
 
+        putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
         setAutoCreateRowSorter(true);
         getTableHeader().setReorderingAllowed(false);
 

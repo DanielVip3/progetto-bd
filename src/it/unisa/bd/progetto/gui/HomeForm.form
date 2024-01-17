@@ -341,6 +341,7 @@
           <component id="1bc35" class="javax.swing.JButton" binding="deleteButton">
             <constraints border-constraint="West"/>
             <properties>
+              <enabled value="false"/>
               <horizontalAlignment value="0"/>
               <text value="Cancella"/>
             </properties>
