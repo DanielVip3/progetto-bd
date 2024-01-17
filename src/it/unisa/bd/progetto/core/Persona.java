@@ -1,9 +1,11 @@
 package it.unisa.bd.progetto.core;
 
+import it.unisa.bd.progetto.gui.RowData;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class Persona {
+public class Persona implements RowData {
     private final int codiceID;
     private final TipoPersona tipo;
     private final String nome;

@@ -2,6 +2,7 @@ package it.unisa.bd.progetto.gui;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.util.List;
 import java.util.Map;
 
 public class DatabaseTable extends JTable {
@@ -28,6 +29,12 @@ public class DatabaseTable extends JTable {
 
     public int getPrimaryKeyForRow(int rowIndex) {
         return Integer.parseInt((String) getValueAt(rowIndex, 0));
+    }
+
+    public void populate(List<? extends RowData> items) {
+        DefaultTableModel tableModel = (DefaultTableModel) getModel();
+        tableModel.setRowCount(0);
+        items.forEach(p -> tableModel.addRow(p.toRow()));
     }
 
     @Override

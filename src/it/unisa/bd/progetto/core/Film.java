@@ -1,6 +1,8 @@
 package it.unisa.bd.progetto.core;
 
-public class Film {
+import it.unisa.bd.progetto.gui.RowData;
+
+public class Film implements RowData {
     private final int codice;
     private final String titolo;
     private final short anno;

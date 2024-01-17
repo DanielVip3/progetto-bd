@@ -2,7 +2,6 @@ package it.unisa.bd.progetto.gui;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import it.unisa.bd.progetto.core.Database;
-import it.unisa.bd.progetto.core.Film;
 import it.unisa.bd.progetto.core.Persona;
 import it.unisa.bd.progetto.core.TipoPersona;
 
@@ -52,25 +51,13 @@ public class HomeForm {
         frame.setSize(new Dimension(600, 450));
     }
 
-    private void populateFilmTable(List<Film> films) {
-        DefaultTableModel tableModel = (DefaultTableModel) filmTable.getModel();
-        tableModel.setRowCount(0);
-        films.forEach(p -> tableModel.addRow(p.toRow()));
-    }
-
-    private void populatePersoneTable(List<Persona> persone) {
-        DefaultTableModel tableModel = (DefaultTableModel) personeTable.getModel();
-        tableModel.setRowCount(0);
-        persone.forEach(p -> tableModel.addRow(p.toRow()));
-    }
-
     private void populateCurrentSelectedPane(String search) {
         int selectedPane = tabbedPane.getSelectedIndex();
 
         try {
             switch (selectedPane) {
-                case 0 -> populateFilmTable(db.getFilms(search));
-                case 1 -> populatePersoneTable(db.getPersone(search));
+                case 0 -> filmTable.populate(db.getFilms(search));
+                case 1 -> personeTable.populate(db.getPersone(search));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -82,10 +69,10 @@ public class HomeForm {
         artisti.forEach(r -> registaComboBox.addItem(r.toString()));
 
         filmTable.initialize();
-        populateFilmTable(db.getFilms());
+        filmTable.populate(db.getFilms());
 
         personeTable.initialize();
-        populatePersoneTable(db.getPersone());
+        personeTable.populate(db.getPersone());
 
         tipoComboBox.addActionListener(new ActionListener() {
             @Override
