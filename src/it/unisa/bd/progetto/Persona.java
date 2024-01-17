@@ -76,8 +76,8 @@ public class Persona {
         return new String[]{
             String.valueOf(codiceID), tipo.toString(), nome, cognome,
             dataDiNascita.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-            numeroPremiVinti != null ? String.valueOf(numeroPremiVinti) : "",
-            matricola != null ? String.valueOf(matricola) : ""
+            numeroPremiVinti != null ? String.valueOf(numeroPremiVinti) : "-",
+            matricola != null ? String.valueOf(matricola) : "-"
         };
     }
 
