@@ -1,4 +1,4 @@
-package it.unisa.bd.progetto;
+package it.unisa.bd.progetto.core;
 
 import java.sql.*;
 import java.time.LocalDate;

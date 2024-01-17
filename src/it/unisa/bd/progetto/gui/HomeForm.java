@@ -1,6 +1,10 @@
-package it.unisa.bd.progetto;
+package it.unisa.bd.progetto.gui;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import it.unisa.bd.progetto.core.Database;
+import it.unisa.bd.progetto.core.Film;
+import it.unisa.bd.progetto.core.Persona;
+import it.unisa.bd.progetto.core.TipoPersona;
 
 import javax.swing.*;
 import javax.swing.event.CellEditorListener;
@@ -11,7 +15,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 public class HomeForm {
@@ -25,13 +28,13 @@ public class HomeForm {
     private JTextField durataTextField;
     private JTextField etaMinimaTextField;
     private JComboBox<String> registaComboBox;
-    private DatabaseTable filmTable;
+    private FilmTable filmTable;
     private JTextField codiceIdTextField;
     private JComboBox<String> tipoComboBox;
     private JTextField dataDiNascitaTextField;
     private JTextField cognomeTextField;
     private JTextField nomeTextField;
-    private DatabaseTable personeTable;
+    private PersoneTable personeTable;
     private JPanel additionalPersonaPanel;
     private JLabel additionalPersonaPanelTextField;
     private JTextField searchTextField;
@@ -47,59 +50,6 @@ public class HomeForm {
         frame.pack();
         frame.setVisible(true);
         frame.setSize(new Dimension(600, 450));
-    }
-
-    private void initializeFilmTable() {
-        LinkedHashMap<String, String> columnFields = new LinkedHashMap<>();
-        columnFields.put("Codice", "Codice");
-        columnFields.put("Titolo", "Titolo");
-        columnFields.put("Anno", "Anno");
-        columnFields.put("Durata", "Durata");
-        columnFields.put("Età minima", "EtàMinima");
-
-        filmTable.initialize(columnFields);
-
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-
-        TableColumnModel columnModel = filmTable.getColumnModel();
-        columnModel.getColumn(0).setMaxWidth(75);
-        columnModel.getColumn(1).setPreferredWidth(300);
-        columnModel.getColumn(2).setMaxWidth(75);
-        columnModel.getColumn(2).setCellRenderer(centerRenderer);
-        columnModel.getColumn(3).setMaxWidth(75);
-        columnModel.getColumn(3).setCellRenderer(centerRenderer);
-        columnModel.getColumn(4).setMaxWidth(75);
-        columnModel.getColumn(4).setCellRenderer(centerRenderer);
-    }
-
-    private void initializePersoneTable() {
-        LinkedHashMap<String, String> columnFields = new LinkedHashMap<>();
-        columnFields.put("Codice ID", "CodiceID");
-        columnFields.put("Tipo", "Tipo");
-        columnFields.put("Nome", "Nome");
-        columnFields.put("Cognome", "Cognome");
-        columnFields.put("Data di nascita", "DataDiNascita");
-        columnFields.put("# premi vinti", "NumeroPremiVinti");
-        columnFields.put("Matricola", "Matricola");
-
-        personeTable.initialize(columnFields);
-
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-
-        TableColumnModel columnModel = personeTable.getColumnModel();
-        columnModel.getColumn(0).setMaxWidth(75);
-        columnModel.getColumn(1).setMaxWidth(150);
-        columnModel.getColumn(2).setPreferredWidth(200);
-        columnModel.getColumn(3).setPreferredWidth(200);
-        columnModel.getColumn(4).setPreferredWidth(125);
-        columnModel.getColumn(4).setMaxWidth(125);
-        columnModel.getColumn(4).setCellRenderer(centerRenderer);
-        columnModel.getColumn(5).setMaxWidth(125);
-        columnModel.getColumn(5).setCellRenderer(centerRenderer);
-        columnModel.getColumn(6).setMaxWidth(75);
-        columnModel.getColumn(6).setCellRenderer(centerRenderer);
     }
 
     private void populateFilmTable(List<Film> films) {
@@ -131,10 +81,10 @@ public class HomeForm {
         List<Persona> artisti = db.getPersone(null, TipoPersona.ARTISTA);
         artisti.forEach(r -> registaComboBox.addItem(r.toString()));
 
-        initializeFilmTable();
+        filmTable.initialize();
         populateFilmTable(db.getFilms());
 
-        initializePersoneTable();
+        personeTable.initialize();
         populatePersoneTable(db.getPersone());
 
         tipoComboBox.addActionListener(new ActionListener() {

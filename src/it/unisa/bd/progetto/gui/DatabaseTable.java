@@ -1,4 +1,4 @@
-package it.unisa.bd.progetto;
+package it.unisa.bd.progetto.gui;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -7,7 +7,7 @@ import java.util.Map;
 public class DatabaseTable extends JTable {
     private Map<String, String> columnsFields; // pair <tableColumnName, dbField>
 
-    public void initialize(Map<String, String> columnNames) {
+    protected void initialize(Map<String, String> columnNames) {
         columnsFields = columnNames;
 
         setAutoCreateRowSorter(true);
