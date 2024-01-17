@@ -80,4 +80,9 @@ public class Persona {
             matricola != null ? String.valueOf(matricola) : ""
         };
     }
+
+    @Override
+    public String toString() {
+        return getNome() + " " + getCognome();
+    }
 }

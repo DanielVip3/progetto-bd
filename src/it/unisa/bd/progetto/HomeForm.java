@@ -6,17 +6,11 @@ import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 public class HomeForm {
     private static final Database db = new Database();
-    private static final List<Film> films = new ArrayList<>();
-    private static final List<Persona> persone = new ArrayList<>();
 
     private JTabbedPane tabbedPane1;
     private JPanel root;
@@ -36,7 +30,7 @@ public class HomeForm {
     private JPanel additionalPersonaPanel;
     private JLabel additionalPersonaPanelTextField;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         FlatMacLightLaf.setup();
 
         JFrame frame = new JFrame("Cinema");
@@ -44,61 +38,6 @@ public class HomeForm {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-    }
-
-    private void queryFilms() {
-        try {
-            ResultSet rs = db.getConnection().createStatement().executeQuery("SELECT * FROM film;");
-
-            while (rs.next()) {
-                films.add(new Film(
-                        rs.getString("Codice"), rs.getString("Titolo"),
-                        rs.getShort("Anno"), rs.getShort("Durata"),
-                        rs.getShort("EtàMinima")
-                ));
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            System.exit(1);
-        }
-    }
-
-    private void queryPersone() {
-        try {
-            ResultSet rs = db.getConnection().createStatement().executeQuery("SELECT * FROM persona;");
-
-            while (rs.next()) {
-                TipoPersona type = TipoPersona.fromString(rs.getString("Tipo"));
-                persone.add(new Persona(
-                        rs.getInt("CodiceID"), type,
-                        rs.getString("Nome"), rs.getString("Cognome"),
-                        LocalDate.parse(rs.getString("DataDiNascita"), DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")),
-                        switch (type) {
-                            default -> null;
-                            case ARTISTA -> rs.getInt("NumeroPremiVinti");
-                            case IMPIEGATO -> rs.getInt("Matricola");
-                        }
-                ));
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            System.exit(1);
-        }
-    }
-
-    private List<String> queryRegistiPossibili() {
-        List<String> registi = new ArrayList<>();
-
-        try {
-            ResultSet rs = db.getConnection().createStatement().executeQuery("SELECT Nome, Cognome FROM Persona WHERE Tipo = 'Artista';");
-
-            while (rs.next()) registi.add(rs.getString("nome") + " " + rs.getString("cognome"));
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            System.exit(1);
-        }
-
-        return registi;
     }
 
     private void initializeFilmTable() {
@@ -140,22 +79,27 @@ public class HomeForm {
         columnModel.getColumn(6).setCellRenderer(centerRenderer);
     }
 
-    private void initializeRegisti() {
-        List<String> registiPossibili = queryRegistiPossibili();
-        for (String regista : registiPossibili) registaComboBox.addItem(regista);
+    private void populateFilmTable(List<Film> films) {
+        DefaultTableModel tableModel = (DefaultTableModel) filmTable.getModel();
+        for (int i = 0; i < tableModel.getRowCount(); i++) tableModel.removeRow(i);
+        films.forEach(p -> tableModel.addRow(p.toRow()));
     }
 
-    public HomeForm() {
-        initializeRegisti();
+    private void populatePersoneTable(List<Persona> persone) {
+        DefaultTableModel tableModel = (DefaultTableModel) personeTable.getModel();
+        for (int i = 0; i < tableModel.getRowCount(); i++) tableModel.removeRow(i);
+        persone.forEach(p -> tableModel.addRow(p.toRow()));
+    }
 
-        queryFilms();
+    public HomeForm() throws SQLException {
+        List<Persona> artisti = db.getPersone(TipoPersona.ARTISTA);
+        artisti.forEach(r -> registaComboBox.addItem(r.toString()));
+
         initializeFilmTable();
+        populateFilmTable(db.getFilms());
 
-        queryPersone();
         initializePersoneTable();
-
-        films.forEach(f -> ((DefaultTableModel) filmTable.getModel()).addRow(f.toRow()));
-        persone.forEach(p -> ((DefaultTableModel) personeTable.getModel()).addRow(p.toRow()));
+        populatePersoneTable(db.getPersone());
 
         tipoComboBox.addActionListener(new ActionListener() {
             @Override
@@ -168,7 +112,7 @@ public class HomeForm {
                 switch (type) {
                     default -> additionalPersonaPanel.setVisible(false);
                     case ARTISTA -> {
-                        additionalPersonaPanelTextField.setText("Numero premi vinti");
+                        additionalPersonaPanelTextField.setText("# premi vinti");
                         additionalPersonaPanel.setVisible(true);
                     }
                     case IMPIEGATO -> {
