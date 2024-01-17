@@ -40,6 +40,7 @@ public class HomeForm {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        frame.setSize(new Dimension(600, 450));
     }
 
     private void initializeFilmTable() {
