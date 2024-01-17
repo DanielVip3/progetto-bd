@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="it.unisa.bd.progetto.HomeForm">
+  <grid id="27dc6" binding="root" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="0" left="0" bottom="0" right="0"/>
+    <constraints>
+      <xy x="69" y="31" width="573" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <tabbedpane id="1e685" binding="tabbedPane1" default-binding="true">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
+            <preferred-size width="200" height="200"/>
+          </grid>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <grid id="a1248" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints>
+              <tabbedpane title="Film"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <grid id="6e5e" layout-manager="BorderLayout" hgap="0" vgap="0">
+                <constraints border-constraint="First"/>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <grid id="f6eba" layout-manager="FlowLayout" hgap="20" vgap="5" flow-align="1">
+                    <constraints border-constraint="North"/>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <grid id="540fe" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints/>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="4bd00" class="javax.swing.JLabel">
+                            <constraints border-constraint="North"/>
+                            <properties>
+                              <text value="Codice"/>
+                            </properties>
+                          </component>
+                          <component id="15e0" class="javax.swing.JTextField" binding="codiceTextField">
+                            <constraints border-constraint="Center"/>
+                            <properties>
+                              <columns value="10"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <grid id="1c342" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints/>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="71f20" class="javax.swing.JLabel">
+                            <constraints border-constraint="North"/>
+                            <properties>
+                              <text value="Titolo"/>
+                            </properties>
+                          </component>
+                          <component id="bec70" class="javax.swing.JTextField" binding="titoloTextField">
+                            <constraints border-constraint="Center"/>
+                            <properties>
+                              <columns value="10"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <grid id="fcbc1" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints/>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="cf1b9" class="javax.swing.JLabel">
+                            <constraints border-constraint="North"/>
+                            <properties>
+                              <text value="Durata"/>
+                            </properties>
+                          </component>
+                          <component id="c856e" class="javax.swing.JTextField" binding="durataTextField">
+                            <constraints border-constraint="Center"/>
+                            <properties>
+                              <columns value="10"/>
+                              <text value=""/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                    </children>
+                  </grid>
+                  <grid id="fcc38" layout-manager="FlowLayout" hgap="20" vgap="5" flow-align="1">
+                    <constraints border-constraint="South"/>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <grid id="5916e" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints/>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="59839" class="javax.swing.JLabel">
+                            <constraints border-constraint="North"/>
+                            <properties>
+                              <text value="Anno"/>
+                            </properties>
+                          </component>
+                          <component id="aeb6f" class="javax.swing.JTextField" binding="annoTextField">
+                            <constraints border-constraint="Center"/>
+                            <properties>
+                              <columns value="10"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <grid id="b1ab1" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints/>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="7ae8f" class="javax.swing.JLabel">
+                            <constraints border-constraint="North"/>
+                            <properties>
+                              <text value="Età minima"/>
+                            </properties>
+                          </component>
+                          <component id="25ff" class="javax.swing.JTextField" binding="etaMinimaTextField">
+                            <constraints border-constraint="Center"/>
+                            <properties>
+                              <columns value="10"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <grid id="95363" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints/>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="4a7ef" class="javax.swing.JLabel">
+                            <constraints border-constraint="North"/>
+                            <properties>
+                              <text value="Regista"/>
+                            </properties>
+                          </component>
+                          <component id="dd74a" class="javax.swing.JComboBox" binding="registaComboBox">
+                            <constraints border-constraint="Center"/>
+                            <properties>
+                              <model>
+                                <item value="Sconosciuto"/>
+                              </model>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                    </children>
+                  </grid>
+                </children>
+              </grid>
+              <scrollpane id="6e6cd">
+                <constraints border-constraint="Center"/>
+                <properties/>
+                <border type="none" title="Film"/>
+                <children>
+                  <component id="2777" class="javax.swing.JTable" binding="filmTable">
+                    <constraints/>
+                    <properties/>
+                  </component>
+                </children>
+              </scrollpane>
+            </children>
+          </grid>
+          <grid id="b0350" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints>
+              <tabbedpane title="Persone"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <grid id="62b66" layout-manager="BorderLayout" hgap="0" vgap="0">
+                <constraints border-constraint="North"/>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <grid id="7de35" layout-manager="FlowLayout" hgap="20" vgap="5" flow-align="1">
+                    <constraints border-constraint="North"/>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <grid id="e5d3d" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints/>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="a547c" class="javax.swing.JLabel">
+                            <constraints border-constraint="North"/>
+                            <properties>
+                              <text value="Codice ID"/>
+                            </properties>
+                          </component>
+                          <component id="88952" class="javax.swing.JTextField" binding="codiceIdTextField">
+                            <constraints border-constraint="Center"/>
+                            <properties>
+                              <columns value="10"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <grid id="87b6f" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints/>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="b718b" class="javax.swing.JLabel">
+                            <constraints border-constraint="North"/>
+                            <properties>
+                              <text value="Nome"/>
+                            </properties>
+                          </component>
+                          <component id="490c1" class="javax.swing.JTextField" binding="nomeTextField">
+                            <constraints border-constraint="Center"/>
+                            <properties>
+                              <columns value="10"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <grid id="41677" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints/>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="f2765" class="javax.swing.JLabel">
+                            <constraints border-constraint="North"/>
+                            <properties>
+                              <text value="Cognome"/>
+                            </properties>
+                          </component>
+                          <component id="a9a14" class="javax.swing.JTextField" binding="cognomeTextField">
+                            <constraints border-constraint="Center"/>
+                            <properties>
+                              <columns value="10"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                    </children>
+                  </grid>
+                  <grid id="31e19" layout-manager="FlowLayout" hgap="20" vgap="5" flow-align="1">
+                    <constraints border-constraint="South"/>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <grid id="5528a" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints/>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="82986" class="javax.swing.JLabel">
+                            <constraints border-constraint="North"/>
+                            <properties>
+                              <text value="Data di nascita"/>
+                            </properties>
+                          </component>
+                          <component id="49530" class="javax.swing.JTextField" binding="dataDiNascitaTextField">
+                            <constraints border-constraint="Center"/>
+                            <properties>
+                              <columns value="10"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <grid id="e79f3" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints/>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="aaf25" class="javax.swing.JLabel">
+                            <constraints border-constraint="North"/>
+                            <properties>
+                              <text value="Tipo"/>
+                            </properties>
+                          </component>
+                          <component id="de1fb" class="javax.swing.JComboBox" binding="tipoComboBox">
+                            <constraints border-constraint="East"/>
+                            <properties>
+                              <model>
+                                <item value="Cliente"/>
+                                <item value="Artista"/>
+                                <item value="Impiegato"/>
+                              </model>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <grid id="16405" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints/>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="6619" class="javax.swing.JLabel">
+                            <constraints border-constraint="North"/>
+                            <properties>
+                              <text value="Numero premi vinti"/>
+                            </properties>
+                          </component>
+                          <component id="766f5" class="javax.swing.JTextField">
+                            <constraints border-constraint="Center"/>
+                            <properties>
+                              <columns value="10"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                    </children>
+                  </grid>
+                </children>
+              </grid>
+              <scrollpane id="3beaa">
+                <constraints border-constraint="Center"/>
+                <properties/>
+                <border type="none" title="Persone"/>
+                <children>
+                  <component id="390bf" class="javax.swing.JTable" binding="personeTable">
+                    <constraints/>
+                    <properties/>
+                  </component>
+                </children>
+              </scrollpane>
+            </children>
+          </grid>
+        </children>
+      </tabbedpane>
+    </children>
+  </grid>
+</form>
