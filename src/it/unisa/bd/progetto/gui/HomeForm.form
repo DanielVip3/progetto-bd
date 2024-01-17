@@ -161,7 +161,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="fb808" class="javax.swing.JButton" binding="aggiungiButton" default-binding="true">
+                      <component id="fb808" class="javax.swing.JButton" binding="addFilmButton">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -203,25 +203,6 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <grid id="e5d3d" layout-manager="BorderLayout" hgap="0" vgap="0">
-                        <constraints/>
-                        <properties/>
-                        <border type="none"/>
-                        <children>
-                          <component id="a547c" class="javax.swing.JLabel">
-                            <constraints border-constraint="North"/>
-                            <properties>
-                              <text value="Codice ID"/>
-                            </properties>
-                          </component>
-                          <component id="88952" class="javax.swing.JTextField" binding="codiceIdTextField">
-                            <constraints border-constraint="Center"/>
-                            <properties>
-                              <columns value="10"/>
-                            </properties>
-                          </component>
-                        </children>
-                      </grid>
                       <grid id="87b6f" layout-manager="BorderLayout" hgap="0" vgap="0">
                         <constraints/>
                         <properties/>
@@ -316,13 +297,13 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="6619" class="javax.swing.JLabel" binding="additionalPersonaPanelTextField">
+                          <component id="6619" class="javax.swing.JLabel" binding="additionalPersonaPanelLabel">
                             <constraints border-constraint="North"/>
                             <properties>
                               <text value="Numero premi vinti"/>
                             </properties>
                           </component>
-                          <component id="766f5" class="javax.swing.JTextField">
+                          <component id="766f5" class="javax.swing.JTextField" binding="additionalPersonaPanelTextField">
                             <constraints border-constraint="Center"/>
                             <properties>
                               <columns value="10"/>
@@ -338,7 +319,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="872cb" class="javax.swing.JButton" default-binding="true">
+                      <component id="872cb" class="javax.swing.JButton" binding="addPersonaButton">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>

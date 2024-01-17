@@ -2,6 +2,7 @@ package it.unisa.bd.progetto.gui;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import it.unisa.bd.progetto.core.Database;
+import it.unisa.bd.progetto.core.Film;
 import it.unisa.bd.progetto.core.Persona;
 import it.unisa.bd.progetto.core.TipoPersona;
 
@@ -16,6 +17,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class HomeForm {
@@ -27,19 +30,20 @@ public class HomeForm {
     private JTextField durataTextField;
     private JTextField etaMinimaTextField;
     private JComboBox<String> registaComboBox;
-    private JTextField codiceIdTextField;
     private JComboBox<String> tipoComboBox;
     private JTextField dataDiNascitaTextField;
     private JTextField cognomeTextField;
     private JTextField nomeTextField;
     private JPanel additionalPersonaPanel;
-    private JLabel additionalPersonaPanelTextField;
+    private JLabel additionalPersonaPanelLabel;
     private JTextField searchTextField;
     private JLabel searchLabel;
     private FilmTable filmTable;
     private PersoneTable personeTable;
     private JButton deleteButton;
-    private JButton aggiungiButton;
+    private JButton addFilmButton;
+    private JButton addPersonaButton;
+    private JTextField additionalPersonaPanelTextField;
 
     private ListSelectionListener disableDeleteButtonIfNoSelection = new ListSelectionListener() {
         public void valueChanged(ListSelectionEvent e) {
@@ -101,11 +105,11 @@ public class HomeForm {
                 switch (type) {
                     default -> additionalPersonaPanel.setVisible(false);
                     case ARTISTA -> {
-                        additionalPersonaPanelTextField.setText("# premi vinti");
+                        additionalPersonaPanelLabel.setText("# premi vinti");
                         additionalPersonaPanel.setVisible(true);
                     }
                     case IMPIEGATO -> {
-                        additionalPersonaPanelTextField.setText("Matricola");
+                        additionalPersonaPanelLabel.setText("Matricola");
                         additionalPersonaPanel.setVisible(true);
                     }
                 }
@@ -147,18 +151,63 @@ public class HomeForm {
         filmTable.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
-                filmTable.clearSelection();
+                if (e.getOppositeComponent() == null || !e.getOppositeComponent().equals(deleteButton)) filmTable.clearSelection();
             }
         });
 
         personeTable.addFocusListener(new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
-                personeTable.clearSelection();
+                if (e.getOppositeComponent() == null || !e.getOppositeComponent().equals(deleteButton)) personeTable.clearSelection();
             }
         });
 
         filmTable.getSelectionModel().addListSelectionListener(disableDeleteButtonIfNoSelection);
         personeTable.getSelectionModel().addListSelectionListener(disableDeleteButtonIfNoSelection);
+
+        addFilmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int codice = Integer.parseInt(codiceTextField.getText());
+                String titolo = titoloTextField.getText();
+                short durata = Short.parseShort(durataTextField.getText());
+                short anno = Short.parseShort(annoTextField.getText());
+                short etaMinima = Short.parseShort(etaMinimaTextField.getText());
+                String regista = (String) registaComboBox.getSelectedItem();
+                Film film = new Film(codice, titolo, durata, anno, etaMinima, regista);
+
+                try {
+                    filmTable.insert(film);
+                    filmTable.addRow(film);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        addPersonaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String tipoString = (String) tipoComboBox.getSelectedItem();
+                if (tipoString == null || tipoString.isBlank()) return;
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                String nome = nomeTextField.getText();
+                String cognome = cognomeTextField.getText();
+                LocalDate dataDiNascita = LocalDate.parse(dataDiNascitaTextField.getText(), formatter);
+                TipoPersona tipo = TipoPersona.fromString((String) tipoComboBox.getSelectedItem());
+                Integer additionalInfo = tipo != TipoPersona.CLIENTE ? Integer.parseInt(additionalPersonaPanelTextField.getText()) : null;
+                Persona persona = new Persona(-1, tipo, nome, cognome, dataDiNascita, additionalInfo);
+
+                try {
+                    int codiceID = personeTable.insert(persona);
+                    persona.setCodiceID(codiceID);
+                    personeTable.addRow(persona);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
     }
 }

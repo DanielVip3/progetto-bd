@@ -1,6 +1,7 @@
 package it.unisa.bd.progetto.gui;
 
 import it.unisa.bd.progetto.core.Database;
+import it.unisa.bd.progetto.core.Persona;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -38,6 +39,10 @@ public class PersoneTable extends DatabaseTable {
         columnModel.getColumn(6).setCellRenderer(centerRenderer);
 
         getDefaultEditor(String.class).addCellEditorListener(changeNotification);
+    }
+
+    public int insert(RowData persona) throws SQLException {
+        return Database.insertPersona((Persona) persona);
     }
 
     public void update(int primaryKey, String field, String newValue) throws SQLException {

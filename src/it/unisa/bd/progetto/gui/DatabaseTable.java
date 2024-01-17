@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-public abstract class DatabaseTable extends JTable {
+public abstract class DatabaseTable<T extends RowData> extends JTable {
     public CellEditorListener changeNotification = new CellEditorListener() {
         public void editingCanceled(ChangeEvent e) {}
         public void editingStopped(ChangeEvent e) {
@@ -54,6 +54,10 @@ public abstract class DatabaseTable extends JTable {
         return Integer.parseInt((String) getValueAt(rowIndex, 0));
     }
 
+    public void addRow(RowData item) {
+        ((DefaultTableModel) getModel()).addRow(item.toRow());
+    }
+
     public void removeRow(int rowIndex) {
         ((DefaultTableModel) getModel()).removeRow(rowIndex);
     }
@@ -61,7 +65,7 @@ public abstract class DatabaseTable extends JTable {
     public void populate(List<? extends RowData> items) {
         DefaultTableModel tableModel = (DefaultTableModel) getModel();
         tableModel.setRowCount(0);
-        items.forEach(p -> tableModel.addRow(p.toRow()));
+        items.forEach(this::addRow);
     }
 
     @Override
@@ -69,6 +73,7 @@ public abstract class DatabaseTable extends JTable {
         return col != 0;
     }
 
+    public abstract int insert(T data) throws SQLException;
     public abstract void update(int primaryKey, String field, String newValue) throws SQLException;
     public abstract void delete(int primaryKey) throws SQLException;
 }

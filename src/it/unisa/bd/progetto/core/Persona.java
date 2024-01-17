@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class Persona implements RowData {
-    private final int codiceID;
+    private int codiceID;
     private final TipoPersona tipo;
     private final String nome;
     private final String cognome;
@@ -49,6 +49,8 @@ public class Persona implements RowData {
     public int getCodiceID() {
         return codiceID;
     }
+
+    public void setCodiceID(int codice) { codiceID = codice; }
 
     public TipoPersona getTipo() {
         return tipo;

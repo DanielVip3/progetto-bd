@@ -32,7 +32,11 @@ public class Database {
     public static List<Film> getFilms(String search) throws SQLException {
         List<Film> films = new ArrayList<>();
 
-        PreparedStatement statement = getConnection().prepareStatement("SELECT * FROM Film WHERE titolo LIKE ?;");
+        PreparedStatement statement = getConnection().prepareStatement(
+        "SELECT Film.*, CONCAT(Nome, ' ', Cognome) AS NomeRegista " +
+            "FROM Film LEFT JOIN Persona ON Film.Regista = Persona.CodiceID " +
+            "WHERE titolo LIKE ?;"
+        );
         statement.setString(1, search == null || search.isEmpty() ? "%" : "%" + search + "%");
         ResultSet rs = statement.executeQuery();
 
@@ -40,7 +44,7 @@ public class Database {
             films.add(new Film(
                 rs.getInt("Codice"), rs.getString("Titolo"),
                 rs.getShort("Anno"), rs.getShort("Durata"),
-                rs.getShort("EtàMinima")
+                rs.getShort("EtàMinima"), rs.getString("NomeRegista")
             ));
         }
 
@@ -79,6 +83,64 @@ public class Database {
         }
 
         return persone;
+    }
+
+    public static void insertFilm(Film film) throws SQLException {
+        PreparedStatement statement;
+        Integer codiceRegista = null;
+
+        if (!film.getRegista().equals("Sconosciuto")) {
+            statement = getConnection().prepareStatement("SELECT CodiceID From Persona WHERE CONCAT(Nome, ' ', Cognome) = ?");
+            statement.setString(1, film.getRegista());
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                codiceRegista = rs.getInt("CodiceID");
+            } else {
+                throw new RuntimeException("Il regista cercato non esiste.");
+            }
+        }
+
+        statement = getConnection().prepareStatement(
+        "INSERT INTO Film (Codice, Titolo, Durata, Anno, EtàMinima, Regista) " +
+            "VALUES (?, ?, ?, ?, ?, ?);"
+        );
+
+        statement.setInt(1, film.getCodice());
+        statement.setString(2, film.getTitolo());
+        statement.setShort(3, film.getDurata());
+        statement.setShort(4, film.getAnno());
+        statement.setShort(5, film.getEtaMinima());
+
+        if (codiceRegista != null) statement.setInt(6, codiceRegista);
+        else statement.setNull(6, java.sql.Types.NULL);
+
+        statement.execute();
+    }
+
+    public static int insertPersona(Persona persona) throws SQLException {
+        PreparedStatement statement = getConnection().prepareStatement(
+        "INSERT INTO Persona (Tipo, Nome, Cognome, DataDiNascita, NumeroPremiVinti, Matricola) " +
+            "VALUES (?, ?, ?, ?, ?, ?);",
+            Statement.RETURN_GENERATED_KEYS
+        );
+
+        statement.setString(1, persona.getTipo().toString());
+        statement.setString(2, persona.getNome());
+        statement.setString(3, persona.getCognome());
+        statement.setDate(4, Date.valueOf(persona.getDataDiNascita()));
+
+        if (persona.getTipo() == TipoPersona.ARTISTA) statement.setInt(5, persona.getNumeroPremiVinti());
+        else statement.setNull(5, java.sql.Types.NULL);
+
+        if (persona.getTipo() == TipoPersona.IMPIEGATO) statement.setInt(6, persona.getMatricola());
+        else statement.setNull(6, java.sql.Types.NULL);
+
+        statement.execute();
+
+        ResultSet rs = statement.getGeneratedKeys();
+        if (rs.next()) return rs.getInt(1);
+        else return -1;
     }
 
     public static void updateFilm(int codice, String column, String value) throws SQLException {

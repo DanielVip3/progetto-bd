@@ -1,6 +1,7 @@
 package it.unisa.bd.progetto.gui;
 
 import it.unisa.bd.progetto.core.Database;
+import it.unisa.bd.progetto.core.Film;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -16,6 +17,7 @@ public class FilmTable extends DatabaseTable {
         columnFields.put("Anno", "Anno");
         columnFields.put("Durata", "Durata");
         columnFields.put("Età minima", "EtàMinima");
+        columnFields.put("Nome regista", "NomeRegista");
 
         super.initialize(columnFields);
 
@@ -33,6 +35,11 @@ public class FilmTable extends DatabaseTable {
         columnModel.getColumn(4).setCellRenderer(centerRenderer);
 
         getDefaultEditor(String.class).addCellEditorListener(changeNotification);
+    }
+
+    public int insert(RowData film) throws SQLException {
+        Database.insertFilm((Film) film);
+        return 0;
     }
 
     public void update(int primaryKey, String field, String newValue) throws SQLException {
