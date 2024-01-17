@@ -8,12 +8,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class HomeForm {
     private static final Database db = new Database();
     private static final List<Film> films = new ArrayList<>();
+    private static final List<Persona> persone = new ArrayList<>();
 
     private JTabbedPane tabbedPane1;
     private JPanel root;
@@ -60,6 +64,29 @@ public class HomeForm {
         }
     }
 
+    private void queryPersone() {
+        try {
+            ResultSet rs = db.getConnection().createStatement().executeQuery("SELECT * FROM persona;");
+
+            while (rs.next()) {
+                TipoEnum type = TipoEnum.fromString(rs.getString("Tipo"));
+                persone.add(new Persona(
+                        rs.getInt("CodiceID"), type,
+                        rs.getString("Nome"), rs.getString("Cognome"),
+                        LocalDate.parse(rs.getString("DataDiNascita"), DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")),
+                        switch (type) {
+                            default -> null;
+                            case ARTISTA -> rs.getInt("NumeroPremiVinti");
+                            case IMPIEGATO -> rs.getInt("Matricola");
+                        }
+                ));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.exit(1);
+        }
+    }
+
     private List<String> queryRegistiPossibili() {
         List<String> registi = new ArrayList<>();
 
@@ -93,6 +120,27 @@ public class HomeForm {
         columnModel.getColumn(4).setCellRenderer(centerRenderer);
     }
 
+    private void initializePersoneTable() {
+        DefaultTableModel tableModel = new DefaultTableModel(new String[]{"Codice ID", "Tipo", "Nome", "Cognome", "Data di nascita", "# premi vinti", "Matricola"}, 0);
+        personeTable.setModel(tableModel);
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+        TableColumnModel columnModel = personeTable.getColumnModel();
+        columnModel.getColumn(0).setMaxWidth(75);
+        columnModel.getColumn(1).setMaxWidth(150);
+        columnModel.getColumn(2).setPreferredWidth(200);
+        columnModel.getColumn(3).setPreferredWidth(200);
+        columnModel.getColumn(4).setPreferredWidth(125);
+        columnModel.getColumn(4).setMaxWidth(125);
+        columnModel.getColumn(4).setCellRenderer(centerRenderer);
+        columnModel.getColumn(5).setMaxWidth(125);
+        columnModel.getColumn(5).setCellRenderer(centerRenderer);
+        columnModel.getColumn(6).setMaxWidth(75);
+        columnModel.getColumn(6).setCellRenderer(centerRenderer);
+    }
+
     private void initializeRegisti() {
         List<String> registiPossibili = queryRegistiPossibili();
         for (String regista : registiPossibili) registaComboBox.addItem(regista);
@@ -104,7 +152,11 @@ public class HomeForm {
         queryFilms();
         initializeFilmTable();
 
+        queryPersone();
+        initializePersoneTable();
+
         films.forEach(f -> ((DefaultTableModel) filmTable.getModel()).addRow(f.toRow()));
+        persone.forEach(p -> ((DefaultTableModel) personeTable.getModel()).addRow(p.toRow()));
 
         tipoComboBox.addActionListener(new ActionListener() {
             @Override
