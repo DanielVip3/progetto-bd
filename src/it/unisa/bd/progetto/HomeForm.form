@@ -298,12 +298,14 @@
                           </component>
                         </children>
                       </grid>
-                      <grid id="16405" layout-manager="BorderLayout" hgap="0" vgap="0">
+                      <grid id="16405" binding="additionalPersonaPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
                         <constraints/>
-                        <properties/>
+                        <properties>
+                          <visible value="false"/>
+                        </properties>
                         <border type="none"/>
                         <children>
-                          <component id="6619" class="javax.swing.JLabel">
+                          <component id="6619" class="javax.swing.JLabel" binding="additionalPersonaPanelTextField">
                             <constraints border-constraint="North"/>
                             <properties>
                               <text value="Numero premi vinti"/>

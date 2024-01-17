@@ -4,6 +4,8 @@ import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 import javax.swing.*;
 import javax.swing.table.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -28,6 +30,8 @@ public class HomeForm {
     private JTextField cognomeTextField;
     private JTextField nomeTextField;
     private JTable personeTable;
+    private JPanel additionalPersonaPanel;
+    private JLabel additionalPersonaPanelTextField;
 
     public static void main(String[] args) {
         FlatMacLightLaf.setup();
@@ -101,5 +105,27 @@ public class HomeForm {
         initializeFilmTable();
 
         films.forEach(f -> ((DefaultTableModel) filmTable.getModel()).addRow(f.toRow()));
+
+        tipoComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedItem = (String) tipoComboBox.getSelectedItem();
+                if (selectedItem == null || selectedItem.isBlank() || selectedItem.isEmpty()) return;
+
+                TipoEnum type = TipoEnum.fromString((String) tipoComboBox.getSelectedItem());
+
+                switch (type) {
+                    default -> additionalPersonaPanel.setVisible(false);
+                    case ARTISTA -> {
+                        additionalPersonaPanelTextField.setText("Numero premi vinti");
+                        additionalPersonaPanel.setVisible(true);
+                    }
+                    case IMPIEGATO -> {
+                        additionalPersonaPanelTextField.setText("Matricola");
+                        additionalPersonaPanel.setVisible(true);
+                    }
+                }
+            }
+        });
     }
 }
