@@ -39,6 +39,7 @@ public class HomeForm {
     private FilmTable filmTable;
     private PersoneTable personeTable;
     private JButton deleteButton;
+    private JButton aggiungiButton;
 
     private ListSelectionListener disableDeleteButtonIfNoSelection = new ListSelectionListener() {
         public void valueChanged(ListSelectionEvent e) {
