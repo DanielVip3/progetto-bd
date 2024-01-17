@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Database {
+    private final static Database instance = new Database();
     private final static String uri = "jdbc:mysql://localhost:3306/progetto";
     private final static String user = "progetto";
     private final static String password = null;
+    private static Connection connection;
 
-    private Connection connection;
-
-    public Database() {
+    private Database() {
         try {
             connection = DriverManager.getConnection(uri, user, password);
         } catch(SQLException ex) {
@@ -21,15 +21,15 @@ public class Database {
         }
     }
 
-    public Connection getConnection() {
+    public static Connection getConnection() {
         return connection;
     }
 
-    public List<Film> getFilms() throws SQLException {
+    public static List<Film> getFilms() throws SQLException {
         return getFilms(null);
     }
 
-    public List<Film> getFilms(String search) throws SQLException {
+    public static List<Film> getFilms(String search) throws SQLException {
         List<Film> films = new ArrayList<>();
 
         PreparedStatement statement = getConnection().prepareStatement("SELECT * FROM Film WHERE titolo LIKE ?;");
@@ -47,15 +47,15 @@ public class Database {
         return films;
     }
 
-    public List<Persona> getPersone() throws SQLException {
+    public static List<Persona> getPersone() throws SQLException {
         return getPersone(null, null);
     }
 
-    public List<Persona> getPersone(String search) throws SQLException {
+    public static List<Persona> getPersone(String search) throws SQLException {
         return getPersone(search, null);
     }
 
-    public List<Persona> getPersone(String search, TipoPersona filterType) throws SQLException {
+    public static List<Persona> getPersone(String search, TipoPersona filterType) throws SQLException {
         List<Persona> persone = new ArrayList<>();
 
         PreparedStatement statement = getConnection().prepareStatement("SELECT * FROM Persona WHERE CONCAT(nome, ' ', cognome) LIKE ?;");
@@ -81,14 +81,14 @@ public class Database {
         return persone;
     }
 
-    public void updateFilm(int codice, String column, String value) throws SQLException {
+    public static void updateFilm(int codice, String column, String value) throws SQLException {
         PreparedStatement statement = getConnection().prepareStatement("UPDATE Film SET " + column + " = ? WHERE Codice = ?;");
         statement.setString(1, value);
         statement.setInt(2, codice);
         statement.execute();
     }
 
-    public void updatePersona(int codiceID, String column, String value) throws SQLException {
+    public static void updatePersona(int codiceID, String column, String value) throws SQLException {
         PreparedStatement statement = getConnection().prepareStatement("UPDATE Persona SET " + column + " = ? WHERE CodiceID = ?;");
         statement.setString(1, value);
         statement.setInt(2, codiceID);

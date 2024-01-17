@@ -17,8 +17,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class HomeForm {
-    private static final Database db = new Database();
-
     private JTabbedPane tabbedPane;
     private JPanel root;
     private JTextField codiceTextField;
@@ -56,8 +54,8 @@ public class HomeForm {
 
         try {
             switch (selectedPane) {
-                case 0 -> filmTable.populate(db.getFilms(search));
-                case 1 -> personeTable.populate(db.getPersone(search));
+                case 0 -> filmTable.populate(Database.getFilms(search));
+                case 1 -> personeTable.populate(Database.getPersone(search));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -65,14 +63,14 @@ public class HomeForm {
     }
 
     public HomeForm() throws SQLException {
-        List<Persona> artisti = db.getPersone(null, TipoPersona.ARTISTA);
+        List<Persona> artisti = Database.getPersone(null, TipoPersona.ARTISTA);
         artisti.forEach(r -> registaComboBox.addItem(r.toString()));
 
         filmTable.initialize();
-        filmTable.populate(db.getFilms());
+        filmTable.populate(Database.getFilms());
 
         personeTable.initialize();
-        personeTable.populate(db.getPersone());
+        personeTable.populate(Database.getPersone());
 
         tipoComboBox.addActionListener(new ActionListener() {
             @Override
@@ -111,45 +109,5 @@ public class HomeForm {
                 populateCurrentSelectedPane(null);
             }
         });
-
-        CellEditorListener filmsChangeNotification = new CellEditorListener() {
-            public void editingCanceled(ChangeEvent e) {}
-            public void editingStopped(ChangeEvent e) {
-                TableCellEditor editor = (TableCellEditor) e.getSource();
-
-                String newValue = (String) editor.getCellEditorValue();
-                String databaseField = filmTable.getDatabaseFieldFromColumn(filmTable.getSelectedColumn());
-                int codice = filmTable.getPrimaryKeyForRow(filmTable.getSelectedRow());
-
-                try {
-                    db.updateFilm(codice, databaseField, newValue);
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    System.exit(1);
-                }
-            }
-        };
-
-        filmTable.getDefaultEditor(String.class).addCellEditorListener(filmsChangeNotification);
-
-        CellEditorListener personeChangeNotification = new CellEditorListener() {
-            public void editingCanceled(ChangeEvent e) {}
-            public void editingStopped(ChangeEvent e) {
-                TableCellEditor editor = (TableCellEditor) e.getSource();
-
-                String newValue = (String) editor.getCellEditorValue();
-                String databaseField = personeTable.getDatabaseFieldFromColumn(personeTable.getSelectedColumn());
-                int codiceID = personeTable.getPrimaryKeyForRow(personeTable.getSelectedRow());
-
-                try {
-                    db.updatePersona(codiceID, databaseField, newValue);
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                    System.exit(1);
-                }
-            }
-        };
-
-        personeTable.getDefaultEditor(String.class).addCellEditorListener(personeChangeNotification);
     }
 }
