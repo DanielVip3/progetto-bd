@@ -4,7 +4,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class PersoneTable extends DatabaseTable {
     public void initialize() {

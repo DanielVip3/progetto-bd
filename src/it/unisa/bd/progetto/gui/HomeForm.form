@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="it.unisa.bd.progetto.HomeForm">
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="it.unisa.bd.progetto.gui.HomeForm">
   <grid id="27dc6" binding="root" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
       <xy x="69" y="31" width="874" height="1006"/>
@@ -162,7 +162,7 @@
                 <properties/>
                 <border type="none" title="Film"/>
                 <children>
-                  <component id="2777" class="it.unisa.bd.progetto.FilmTable" binding="filmTable">
+                  <component id="ad3b3" class="it.unisa.bd.progetto.gui.FilmTable" binding="filmTable">
                     <constraints/>
                     <properties/>
                   </component>
@@ -323,7 +323,7 @@
                 <properties/>
                 <border type="none" title="Persone"/>
                 <children>
-                  <component id="390bf" class="it.unisa.bd.progetto.PersoneTable" binding="personeTable">
+                  <component id="d3b91" class="it.unisa.bd.progetto.gui.PersoneTable" binding="personeTable">
                     <constraints/>
                     <properties/>
                   </component>

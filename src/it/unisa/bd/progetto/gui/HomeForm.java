@@ -27,17 +27,17 @@ public class HomeForm {
     private JTextField durataTextField;
     private JTextField etaMinimaTextField;
     private JComboBox<String> registaComboBox;
-    private FilmTable filmTable;
     private JTextField codiceIdTextField;
     private JComboBox<String> tipoComboBox;
     private JTextField dataDiNascitaTextField;
     private JTextField cognomeTextField;
     private JTextField nomeTextField;
-    private PersoneTable personeTable;
     private JPanel additionalPersonaPanel;
     private JLabel additionalPersonaPanelTextField;
     private JTextField searchTextField;
     private JLabel searchLabel;
+    private FilmTable filmTable;
+    private PersoneTable personeTable;
 
     public static void main(String[] args) throws SQLException {
         FlatMacLightLaf.setup();
