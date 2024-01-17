@@ -3,17 +3,20 @@ package it.unisa.bd.progetto;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
 import java.sql.SQLException;
 import java.util.List;
 
 public class HomeForm {
     private static final Database db = new Database();
 
-    private JTabbedPane tabbedPane1;
+    private JTabbedPane tabbedPane;
     private JPanel root;
     private JTextField codiceTextField;
     private JTextField titoloTextField;
@@ -30,6 +33,8 @@ public class HomeForm {
     private JTable personeTable;
     private JPanel additionalPersonaPanel;
     private JLabel additionalPersonaPanelTextField;
+    private JTextField searchTextField;
+    private JLabel searchLabel;
 
     public static void main(String[] args) throws SQLException {
         FlatMacLightLaf.setup();
@@ -88,18 +93,31 @@ public class HomeForm {
 
     private void populateFilmTable(List<Film> films) {
         DefaultTableModel tableModel = (DefaultTableModel) filmTable.getModel();
-        for (int i = 0; i < tableModel.getRowCount(); i++) tableModel.removeRow(i);
+        tableModel.setRowCount(0);
         films.forEach(p -> tableModel.addRow(p.toRow()));
     }
 
     private void populatePersoneTable(List<Persona> persone) {
         DefaultTableModel tableModel = (DefaultTableModel) personeTable.getModel();
-        for (int i = 0; i < tableModel.getRowCount(); i++) tableModel.removeRow(i);
+        tableModel.setRowCount(0);
         persone.forEach(p -> tableModel.addRow(p.toRow()));
     }
 
+    private void populateCurrentSelectedPane(String search) {
+        int selectedPane = tabbedPane.getSelectedIndex();
+
+        try {
+            switch (selectedPane) {
+                case 0 -> populateFilmTable(db.getFilms(search));
+                case 1 -> populatePersoneTable(db.getPersone(search));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public HomeForm() throws SQLException {
-        List<Persona> artisti = db.getPersone(TipoPersona.ARTISTA);
+        List<Persona> artisti = db.getPersone(null, TipoPersona.ARTISTA);
         artisti.forEach(r -> registaComboBox.addItem(r.toString()));
 
         initializeFilmTable();
@@ -127,6 +145,22 @@ public class HomeForm {
                         additionalPersonaPanel.setVisible(true);
                     }
                 }
+            }
+        });
+
+        searchTextField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = searchTextField.getText();
+                populateCurrentSelectedPane(text);
+            }
+        });
+
+        tabbedPane.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                searchTextField.setText("");
+                populateCurrentSelectedPane(null);
             }
         });
     }

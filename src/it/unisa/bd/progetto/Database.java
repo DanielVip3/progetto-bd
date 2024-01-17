@@ -1,9 +1,6 @@
 package it.unisa.bd.progetto;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -29,9 +26,15 @@ public class Database {
     }
 
     public List<Film> getFilms() throws SQLException {
+        return getFilms(null);
+    }
+
+    public List<Film> getFilms(String search) throws SQLException {
         List<Film> films = new ArrayList<>();
 
-        ResultSet rs = getConnection().createStatement().executeQuery("SELECT * FROM film;");
+        PreparedStatement statement = getConnection().prepareStatement("SELECT * FROM Film WHERE titolo LIKE ?;");
+        statement.setString(1, search == null || search.isEmpty() ? "%" : "%" + search + "%");
+        ResultSet rs = statement.executeQuery();
 
         while (rs.next()) {
             films.add(new Film(
@@ -45,13 +48,19 @@ public class Database {
     }
 
     public List<Persona> getPersone() throws SQLException {
-        return getPersone(null);
+        return getPersone(null, null);
     }
 
-    public List<Persona> getPersone(TipoPersona filterType) throws SQLException {
+    public List<Persona> getPersone(String search) throws SQLException {
+        return getPersone(search, null);
+    }
+
+    public List<Persona> getPersone(String search, TipoPersona filterType) throws SQLException {
         List<Persona> persone = new ArrayList<>();
 
-        ResultSet rs = getConnection().createStatement().executeQuery("SELECT * FROM persona;");
+        PreparedStatement statement = getConnection().prepareStatement("SELECT * FROM Persona WHERE CONCAT(nome, ' ', cognome) LIKE ?;");
+        statement.setString(1, search == null || search.isEmpty() ? "%" : "%" + search + "%");
+        ResultSet rs = statement.executeQuery();
 
         while (rs.next()) {
             TipoPersona type = TipoPersona.fromString(rs.getString("Tipo"));

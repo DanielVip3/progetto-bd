@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="it.unisa.bd.progetto.HomeForm">
-  <grid id="27dc6" binding="root" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-    <margin top="0" left="0" bottom="0" right="0"/>
+  <grid id="27dc6" binding="root" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
-      <xy x="69" y="31" width="573" height="400"/>
+      <xy x="69" y="31" width="874" height="1006"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <tabbedpane id="1e685" binding="tabbedPane1" default-binding="true">
-        <constraints>
-          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-            <preferred-size width="200" height="200"/>
-          </grid>
-        </constraints>
+      <tabbedpane id="1e685" binding="tabbedPane">
+        <constraints border-constraint="Center"/>
         <properties/>
         <border type="none"/>
         <children>
@@ -338,6 +333,25 @@
           </grid>
         </children>
       </tabbedpane>
+      <grid id="d0c83" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="2">
+        <constraints border-constraint="South"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="7f3b2" class="javax.swing.JLabel" binding="searchLabel">
+            <constraints/>
+            <properties>
+              <text value=""/>
+            </properties>
+          </component>
+          <component id="d404b" class="javax.swing.JTextField" binding="searchTextField">
+            <constraints/>
+            <properties>
+              <columns value="20"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
     </children>
   </grid>
 </form>
