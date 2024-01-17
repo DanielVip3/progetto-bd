@@ -3,14 +3,15 @@ package it.unisa.bd.progetto;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 import javax.swing.*;
+import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class HomeForm {
@@ -24,13 +25,13 @@ public class HomeForm {
     private JTextField durataTextField;
     private JTextField etaMinimaTextField;
     private JComboBox<String> registaComboBox;
-    private JTable filmTable;
+    private DatabaseTable filmTable;
     private JTextField codiceIdTextField;
     private JComboBox<String> tipoComboBox;
     private JTextField dataDiNascitaTextField;
     private JTextField cognomeTextField;
     private JTextField nomeTextField;
-    private JTable personeTable;
+    private DatabaseTable personeTable;
     private JPanel additionalPersonaPanel;
     private JLabel additionalPersonaPanelTextField;
     private JTextField searchTextField;
@@ -49,10 +50,14 @@ public class HomeForm {
     }
 
     private void initializeFilmTable() {
-        filmTable.setAutoCreateRowSorter(true);
+        LinkedHashMap<String, String> columnFields = new LinkedHashMap<>();
+        columnFields.put("Codice", "Codice");
+        columnFields.put("Titolo", "Titolo");
+        columnFields.put("Anno", "Anno");
+        columnFields.put("Durata", "Durata");
+        columnFields.put("Età minima", "EtàMinima");
 
-        DefaultTableModel tableModel = new DefaultTableModel(new String[]{"Codice", "Titolo", "Anno", "Durata", "Età minima"}, 0);
-        filmTable.setModel(tableModel);
+        filmTable.initialize(columnFields);
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -69,10 +74,16 @@ public class HomeForm {
     }
 
     private void initializePersoneTable() {
-        personeTable.setAutoCreateRowSorter(true);
+        LinkedHashMap<String, String> columnFields = new LinkedHashMap<>();
+        columnFields.put("Codice ID", "CodiceID");
+        columnFields.put("Tipo", "Tipo");
+        columnFields.put("Nome", "Nome");
+        columnFields.put("Cognome", "Cognome");
+        columnFields.put("Data di nascita", "DataDiNascita");
+        columnFields.put("# premi vinti", "NumeroPremiVinti");
+        columnFields.put("Matricola", "Matricola");
 
-        DefaultTableModel tableModel = new DefaultTableModel(new String[]{"Codice ID", "Tipo", "Nome", "Cognome", "Data di nascita", "# premi vinti", "Matricola"}, 0);
-        personeTable.setModel(tableModel);
+        personeTable.initialize(columnFields);
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -163,5 +174,45 @@ public class HomeForm {
                 populateCurrentSelectedPane(null);
             }
         });
+
+        CellEditorListener filmsChangeNotification = new CellEditorListener() {
+            public void editingCanceled(ChangeEvent e) {}
+            public void editingStopped(ChangeEvent e) {
+                TableCellEditor editor = (TableCellEditor) e.getSource();
+
+                String newValue = (String) editor.getCellEditorValue();
+                String databaseField = filmTable.getDatabaseFieldFromColumn(filmTable.getSelectedColumn());
+                int codice = filmTable.getPrimaryKeyForRow(filmTable.getSelectedRow());
+
+                try {
+                    db.updateFilm(codice, databaseField, newValue);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    System.exit(1);
+                }
+            }
+        };
+
+        filmTable.getDefaultEditor(String.class).addCellEditorListener(filmsChangeNotification);
+
+        CellEditorListener personeChangeNotification = new CellEditorListener() {
+            public void editingCanceled(ChangeEvent e) {}
+            public void editingStopped(ChangeEvent e) {
+                TableCellEditor editor = (TableCellEditor) e.getSource();
+
+                String newValue = (String) editor.getCellEditorValue();
+                String databaseField = personeTable.getDatabaseFieldFromColumn(personeTable.getSelectedColumn());
+                int codiceID = personeTable.getPrimaryKeyForRow(personeTable.getSelectedRow());
+
+                try {
+                    db.updatePersona(codiceID, databaseField, newValue);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    System.exit(1);
+                }
+            }
+        };
+
+        personeTable.getDefaultEditor(String.class).addCellEditorListener(personeChangeNotification);
     }
 }

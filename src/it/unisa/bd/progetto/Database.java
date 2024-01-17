@@ -38,7 +38,7 @@ public class Database {
 
         while (rs.next()) {
             films.add(new Film(
-                rs.getString("Codice"), rs.getString("Titolo"),
+                rs.getInt("Codice"), rs.getString("Titolo"),
                 rs.getShort("Anno"), rs.getShort("Durata"),
                 rs.getShort("EtàMinima")
             ));
@@ -79,5 +79,19 @@ public class Database {
         }
 
         return persone;
+    }
+
+    public void updateFilm(int codice, String column, String value) throws SQLException {
+        PreparedStatement statement = getConnection().prepareStatement("UPDATE Film SET " + column + " = ? WHERE Codice = ?;");
+        statement.setString(1, value);
+        statement.setInt(2, codice);
+        statement.execute();
+    }
+
+    public void updatePersona(int codiceID, String column, String value) throws SQLException {
+        PreparedStatement statement = getConnection().prepareStatement("UPDATE Persona SET " + column + " = ? WHERE CodiceID = ?;");
+        statement.setString(1, value);
+        statement.setInt(2, codiceID);
+        statement.execute();
     }
 }

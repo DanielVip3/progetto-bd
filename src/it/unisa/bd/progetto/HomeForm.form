@@ -162,7 +162,7 @@
                 <properties/>
                 <border type="none" title="Film"/>
                 <children>
-                  <component id="2777" class="javax.swing.JTable" binding="filmTable">
+                  <component id="2777" class="it.unisa.bd.progetto.DatabaseTable" binding="filmTable">
                     <constraints/>
                     <properties/>
                   </component>
@@ -323,7 +323,7 @@
                 <properties/>
                 <border type="none" title="Persone"/>
                 <children>
-                  <component id="390bf" class="javax.swing.JTable" binding="personeTable">
+                  <component id="390bf" class="it.unisa.bd.progetto.DatabaseTable" binding="personeTable">
                     <constraints/>
                     <properties/>
                   </component>

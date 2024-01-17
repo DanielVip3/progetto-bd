@@ -1,13 +1,13 @@
 package it.unisa.bd.progetto;
 
 public class Film {
-    private final String codice;
+    private final int codice;
     private final String titolo;
     private final short anno;
     private final short durata;
     private final short etaMinima;
 
-    public Film(String codice, String titolo, short anno, short durata, short etaMinima) {
+    public Film(int codice, String titolo, short anno, short durata, short etaMinima) {
         this.codice = codice;
         this.titolo = titolo;
         this.anno = anno;
@@ -15,7 +15,7 @@ public class Film {
         this.etaMinima = etaMinima;
     }
 
-    public String getCodice() {
+    public int getCodice() {
         return codice;
     }
 
@@ -36,6 +36,6 @@ public class Film {
     }
 
     public String[] toRow() {
-        return new String[]{codice, titolo, String.valueOf(anno), String.valueOf(durata), String.valueOf(etaMinima)};
+        return new String[]{String.valueOf(codice), titolo, String.valueOf(anno), String.valueOf(durata), String.valueOf(etaMinima)};
     }
 }
