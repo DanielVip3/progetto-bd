@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class HomeForm {
     private static final Database db = new Database();
@@ -69,7 +68,7 @@ public class HomeForm {
             ResultSet rs = db.getConnection().createStatement().executeQuery("SELECT * FROM persona;");
 
             while (rs.next()) {
-                TipoEnum type = TipoEnum.fromString(rs.getString("Tipo"));
+                TipoPersona type = TipoPersona.fromString(rs.getString("Tipo"));
                 persone.add(new Persona(
                         rs.getInt("CodiceID"), type,
                         rs.getString("Nome"), rs.getString("Cognome"),
@@ -164,7 +163,7 @@ public class HomeForm {
                 String selectedItem = (String) tipoComboBox.getSelectedItem();
                 if (selectedItem == null || selectedItem.isBlank() || selectedItem.isEmpty()) return;
 
-                TipoEnum type = TipoEnum.fromString((String) tipoComboBox.getSelectedItem());
+                TipoPersona type = TipoPersona.fromString((String) tipoComboBox.getSelectedItem());
 
                 switch (type) {
                     default -> additionalPersonaPanel.setVisible(false);

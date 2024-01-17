@@ -1,19 +1,18 @@
 package it.unisa.bd.progetto;
 
-import javax.swing.text.DateFormatter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class Persona {
     private final int codiceID;
-    private final TipoEnum tipo;
+    private final TipoPersona tipo;
     private final String nome;
     private final String cognome;
     private final LocalDate dataDiNascita;
     private Integer numeroPremiVinti;
     private Integer matricola;
 
-    public Persona(int codiceID, TipoEnum tipo, String nome, String cognome, LocalDate dataDiNascita) {
+    public Persona(int codiceID, TipoPersona tipo, String nome, String cognome, LocalDate dataDiNascita) {
         this.codiceID = codiceID;
         this.tipo = tipo;
         this.nome = nome;
@@ -23,7 +22,7 @@ public class Persona {
         this.matricola = null;
     }
 
-    public Persona(int codiceID, TipoEnum tipo, String nome, String cognome, LocalDate dataDiNascita, Integer additionalField) {
+    public Persona(int codiceID, TipoPersona tipo, String nome, String cognome, LocalDate dataDiNascita, Integer additionalField) {
         this.codiceID = codiceID;
         this.tipo = tipo;
         this.nome = nome;
@@ -49,7 +48,7 @@ public class Persona {
         return codiceID;
     }
 
-    public TipoEnum getTipo() {
+    public TipoPersona getTipo() {
         return tipo;
     }
 

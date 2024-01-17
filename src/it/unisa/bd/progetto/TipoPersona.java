@@ -1,11 +1,11 @@
 package it.unisa.bd.progetto;
 
-public enum TipoEnum {
+public enum TipoPersona {
     CLIENTE,
     ARTISTA,
     IMPIEGATO;
 
-    public static TipoEnum fromString(String s) {
+    public static TipoPersona fromString(String s) {
         return switch (s.toLowerCase()) {
             default -> CLIENTE;
             case "artista" -> ARTISTA;
