@@ -163,6 +163,11 @@ public class HomeForm {
 
                 try {
                     personeTable.update(Persona.fromRow(fields));
+
+                    if (column == 4) { // if edited Tipo, we reset the additional fields (they will be set to null in database too)
+                        personeTable.setValueAt("-", row, 5);
+                        personeTable.setValueAt("-", row, 6);
+                    }
                 } catch (SQLException | InvalidParameterException ex) {
                     new ErrorMessage(ex.getMessage());
                     personeTable.resetLastEdit(row, column);
