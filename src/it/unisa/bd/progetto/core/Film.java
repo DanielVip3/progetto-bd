@@ -65,15 +65,15 @@ public class Film implements RowData {
         }
 
         try {
-            durata = Integer.parseInt(row[2]);
+            anno = Integer.parseInt(row[2]);
         } catch (NumberFormatException ex) {
-            throw new InvalidParameterException("La durata inserita non è valida!");
+            throw new InvalidParameterException("L'anno inserito non è valido!");
         }
 
         try {
-            anno = Integer.parseInt(row[3]);
+            durata = Integer.parseInt(row[3]);
         } catch (NumberFormatException ex) {
-            throw new InvalidParameterException("L'anno inserito non è valido!");
+            throw new InvalidParameterException("La durata inserita non è valida!");
         }
 
         try {

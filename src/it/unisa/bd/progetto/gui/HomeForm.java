@@ -24,8 +24,8 @@ public class HomeForm {
     private JPanel root;
     private ValidatedNumberField codiceTextField;
     private ValidatedTextField titoloTextField;
-    private ValidatedNumberSpinner annoSpinner;
     private ValidatedNumberSpinner durataSpinner;
+    private ValidatedNumberSpinner annoSpinner;
     private ValidatedNumberSpinner etaMinimaSpinner;
     private JComboBox<String> registaComboBox;
     private JComboBox<String> tipoComboBox;
@@ -58,8 +58,8 @@ public class HomeForm {
     public HomeForm() {
         TablesUIManager tablesUIManager = new TablesUIManager(tabbedPane, new DatabaseTable[]{filmTable, personeTable}, deleteButton, registaComboBox);
 
-        annoSpinner.bounds(1900, Year.now().getValue() + 10, Year.now().getValue());
         durataSpinner.bounds(1, 6000, 120);
+        annoSpinner.bounds(1900, Year.now().getValue() + 10, Year.now().getValue());
         etaMinimaSpinner.bounds(0, 18, 0);
 
         /* Event 1: change of type in combobox changes shown additional text panel */
@@ -95,8 +95,8 @@ public class HomeForm {
         addFilmButton.addActionListener(e -> {
             String codice = codiceTextField.getText();
             String titolo = titoloTextField.getText();
-            String durata = durataSpinner.getValue().toString();
-            String anno = annoSpinner.getValue().toString();
+            String durata = annoSpinner.getValue().toString();
+            String anno = durataSpinner.getValue().toString();
             String etaMinima = etaMinimaSpinner.getValue().toString();
             String regista = (String) registaComboBox.getSelectedItem();
 

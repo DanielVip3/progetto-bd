@@ -75,10 +75,10 @@
                           <component id="cf1b9" class="javax.swing.JLabel">
                             <constraints border-constraint="North"/>
                             <properties>
-                              <text value="Durata"/>
+                              <text value="Anno"/>
                             </properties>
                           </component>
-                          <component id="c856e" class="it.unisa.bd.progetto.gui.fields.ValidatedNumberSpinner" binding="durataSpinner">
+                          <component id="c856e" class="it.unisa.bd.progetto.gui.fields.ValidatedNumberSpinner" binding="annoSpinner">
                             <constraints border-constraint="West"/>
                             <properties/>
                           </component>
@@ -99,10 +99,10 @@
                           <component id="59839" class="javax.swing.JLabel">
                             <constraints border-constraint="North"/>
                             <properties>
-                              <text value="Anno"/>
+                              <text value="Durata"/>
                             </properties>
                           </component>
-                          <component id="aeb6f" class="it.unisa.bd.progetto.gui.fields.ValidatedNumberSpinner" binding="annoSpinner">
+                          <component id="aeb6f" class="it.unisa.bd.progetto.gui.fields.ValidatedNumberSpinner" binding="durataSpinner">
                             <constraints border-constraint="Center"/>
                             <properties/>
                           </component>
