@@ -50,6 +50,7 @@ public abstract class DatabaseTable<T extends RowData> extends JTable {
         return getDatabaseFieldFromColumnName(key);
     }
 
+    /* This works only if there is a single primary key and it's the first column; we can safely assume it for our uses */
     public int getPrimaryKeyForRow(int rowIndex) {
         return Integer.parseInt((String) getValueAt(rowIndex, 0));
     }

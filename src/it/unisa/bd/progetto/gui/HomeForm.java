@@ -13,15 +13,11 @@ import it.unisa.bd.progetto.gui.fields.ValidatedTextField;
 import it.unisa.bd.progetto.gui.tables.DatabaseTable;
 import it.unisa.bd.progetto.gui.tables.FilmTable;
 import it.unisa.bd.progetto.gui.tables.PersoneTable;
+import it.unisa.bd.progetto.gui.tables.RowData;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.sql.SQLException;
@@ -52,12 +48,6 @@ public class HomeForm {
     private JButton addPersonaButton;
     private ValidatedNumberField additionalPersonaPanelTextField;
 
-    private ListSelectionListener disableDeleteButtonIfNoSelection = new ListSelectionListener() {
-        public void valueChanged(ListSelectionEvent e) {
-            deleteButton.setEnabled(getCurrentTable().getSelectedRow() >= 0);
-        }
-    };
-
 
     public static void main(String[] args) {
         FlatMacLightLaf.setup();
@@ -71,7 +61,7 @@ public class HomeForm {
         frame.setSize(new Dimension(600, 450));
     }
 
-    private DatabaseTable getCurrentTable() {
+    private DatabaseTable<? extends RowData> getCurrentTable() {
         int selectedPane = tabbedPane.getSelectedIndex();
 
         return switch (selectedPane) {
@@ -90,7 +80,7 @@ public class HomeForm {
     }
 
     private void populateCurrentSelectedPane(String search) {
-        DatabaseTable currentTable = getCurrentTable();
+        DatabaseTable<? extends RowData> currentTable = getCurrentTable();
 
         try {
             if (currentTable instanceof FilmTable) {
@@ -119,57 +109,45 @@ public class HomeForm {
             new ErrorMessage(ex.getMessage());
         }
 
-        tipoComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedItem = (String) tipoComboBox.getSelectedItem();
-                if (selectedItem == null || selectedItem.isBlank() || selectedItem.isEmpty()) return;
+        tipoComboBox.addActionListener(e -> {
+            String selectedItem = (String) tipoComboBox.getSelectedItem();
+            if (selectedItem == null || selectedItem.isBlank() || selectedItem.isEmpty()) return;
 
-                TipoPersona type = TipoPersona.fromString((String) tipoComboBox.getSelectedItem());
+            TipoPersona type = TipoPersona.fromString((String) tipoComboBox.getSelectedItem());
 
-                switch (type) {
-                    default -> additionalPersonaPanel.setVisible(false);
-                    case ARTISTA -> {
-                        additionalPersonaPanelLabel.setText("# premi vinti");
-                        additionalPersonaPanel.setVisible(true);
-                    }
-                    case IMPIEGATO -> {
-                        additionalPersonaPanelLabel.setText("Matricola");
-                        additionalPersonaPanel.setVisible(true);
-                    }
+            switch (type) {
+                default -> additionalPersonaPanel.setVisible(false);
+                case ARTISTA -> {
+                    additionalPersonaPanelLabel.setText("# premi vinti");
+                    additionalPersonaPanel.setVisible(true);
+                }
+                case IMPIEGATO -> {
+                    additionalPersonaPanelLabel.setText("Matricola");
+                    additionalPersonaPanel.setVisible(true);
                 }
             }
         });
 
-        searchTextField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String text = searchTextField.getText();
-                populateCurrentSelectedPane(text);
-            }
+        searchTextField.addActionListener(e -> {
+            String text = searchTextField.getText();
+            populateCurrentSelectedPane(text);
         });
 
-        tabbedPane.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                searchTextField.setText("");
-                populateCurrentSelectedPane(null);
-            }
+        tabbedPane.addChangeListener(e -> {
+            searchTextField.setText("");
+            populateCurrentSelectedPane(null);
         });
 
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                DatabaseTable currentTable = getCurrentTable();
-                int selectedRow = currentTable.getSelectedRow();
-                if (selectedRow < 0) return;
+        deleteButton.addActionListener(e -> {
+            DatabaseTable currentTable = getCurrentTable();
+            int selectedRow = currentTable.getSelectedRow();
+            if (selectedRow < 0) return;
 
-                try {
-                    currentTable.delete(currentTable.getPrimaryKeyForRow(selectedRow));
-                    currentTable.removeRow(selectedRow);
-                } catch (SQLException ex) {
-                    new ErrorMessage(ex.getMessage());
-                }
+            try {
+                currentTable.delete(currentTable.getPrimaryKeyForRow(selectedRow));
+                currentTable.removeRow(selectedRow);
+            } catch (SQLException ex) {
+                new ErrorMessage(ex.getMessage());
             }
         });
 
@@ -187,82 +165,77 @@ public class HomeForm {
             }
         });
 
+        ListSelectionListener disableDeleteButtonIfNoSelection = e -> deleteButton.setEnabled(getCurrentTable().getSelectedRow() >= 0);
         filmTable.getSelectionModel().addListSelectionListener(disableDeleteButtonIfNoSelection);
         personeTable.getSelectionModel().addListSelectionListener(disableDeleteButtonIfNoSelection);
 
-        addFilmButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!codiceTextField.canSubmit()) {
-                    new ErrorMessage("Il codice inserito non è valido!");
-                    return;
-                }
-                int codice = codiceTextField.getContent();
+        addFilmButton.addActionListener(e -> {
+            if (!codiceTextField.canSubmit()) {
+                new ErrorMessage("Il codice inserito non è valido!");
+                return;
+            }
+            int codice = codiceTextField.getContent();
 
-                if (!titoloTextField.canSubmit()) {
-                    new ErrorMessage("Il titolo inserito non è valido (stringa compresa tra 1 e 45 caratteri)!");
-                    return;
-                }
-                String titolo = titoloTextField.getContent();
+            if (!titoloTextField.canSubmit()) {
+                new ErrorMessage("Il titolo inserito non è valido (stringa compresa tra 1 e 45 caratteri)!");
+                return;
+            }
+            String titolo = titoloTextField.getContent();
 
-                /* Always valid because spinner can never be invalid */
-                int durata = durataTextField.getContent();
-                int anno = annoTextField.getContent();
-                int etaMinima = etaMinimaTextField.getContent();
+            /* Always valid because spinner can never be invalid */
+            int durata = durataTextField.getContent();
+            int anno = annoTextField.getContent();
+            int etaMinima = etaMinimaTextField.getContent();
 
-                String regista = (String) registaComboBox.getSelectedItem();
-                Film film = new Film(codice, titolo, durata, anno, etaMinima, regista);
+            String regista = (String) registaComboBox.getSelectedItem();
+            Film film = new Film(codice, titolo, durata, anno, etaMinima, regista);
 
-                try {
-                    filmTable.insert(film);
-                    filmTable.addRow(film);
-                } catch (SQLException ex) {
-                    new ErrorMessage(ex.getMessage());
-                }
+            try {
+                filmTable.insert(film);
+                filmTable.addRow(film);
+            } catch (SQLException ex) {
+                new ErrorMessage(ex.getMessage());
             }
         });
 
-        addPersonaButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String tipoString = (String) tipoComboBox.getSelectedItem();
-                if (tipoString == null || tipoString.isBlank()) return;
+        addPersonaButton.addActionListener(e -> {
+            String tipoString = (String) tipoComboBox.getSelectedItem();
+            if (tipoString == null || tipoString.isBlank()) return;
 
-                if (!nomeTextField.canSubmit()) {
-                    new ErrorMessage("Il nome inserito non è valido (stringa compresa tra 1 e 45 caratteri)!");
-                    return;
-                }
-                String nome = nomeTextField.getContent();
+            if (!nomeTextField.canSubmit()) {
+                new ErrorMessage("Il nome inserito non è valido (stringa compresa tra 1 e 45 caratteri)!");
+                return;
+            }
+            String nome = nomeTextField.getContent();
 
-                if (!cognomeTextField.canSubmit()) {
-                    new ErrorMessage("Il cognome inserito non è valido (stringa compresa tra 1 e 45 caratteri)!");
-                    return;
-                }
-                String cognome = cognomeTextField.getContent();
+            if (!cognomeTextField.canSubmit()) {
+                new ErrorMessage("Il cognome inserito non è valido (stringa compresa tra 1 e 45 caratteri)!");
+                return;
+            }
+            String cognome = cognomeTextField.getContent();
 
-                if (!dataDiNascitaTextField.canSubmit()) {
-                    new ErrorMessage("La data inserita non è valida!");
-                    return;
-                }
-                LocalDate dataDiNascita = dataDiNascitaTextField.getContent();
-                TipoPersona tipo = TipoPersona.fromString((String) tipoComboBox.getSelectedItem());
+            if (!dataDiNascitaTextField.canSubmit()) {
+                new ErrorMessage("La data inserita non è valida!");
+                return;
+            }
+            LocalDate dataDiNascita = dataDiNascitaTextField.getContent();
+            TipoPersona tipo = TipoPersona.fromString((String) tipoComboBox.getSelectedItem());
 
-                if (tipo != TipoPersona.CLIENTE && !additionalPersonaPanelTextField.canSubmit()) {
-                    if (tipo == TipoPersona.ARTISTA) new ErrorMessage("Il numero di premi inserito non è valido!");
-                    else new ErrorMessage("La matricola inserita non è valida!");
-                    return;
-                }
-                Integer additionalInfo = tipo != TipoPersona.CLIENTE ? additionalPersonaPanelTextField.getContent() : null;
+            if (tipo != TipoPersona.CLIENTE && !additionalPersonaPanelTextField.canSubmit()) {
+                if (tipo == TipoPersona.ARTISTA) new ErrorMessage("Il numero di premi inserito non è valido!");
+                else new ErrorMessage("La matricola inserita non è valida!");
+                return;
+            }
+            Integer additionalInfo = tipo != TipoPersona.CLIENTE ? additionalPersonaPanelTextField.getContent() : null;
 
-                Persona persona = new Persona(-1, tipo, nome, cognome, dataDiNascita, additionalInfo);
+            Persona persona = new Persona(-1, tipo, nome, cognome, dataDiNascita, additionalInfo);
 
-                try {
-                    int codiceID = personeTable.insert(persona);
-                    persona.setCodiceID(codiceID);
-                    personeTable.addRow(persona);
-                } catch (SQLException ex) {
-                    new ErrorMessage(ex.getMessage());
-                }
+            try {
+                int codiceID = personeTable.insert(persona);
+                persona.setCodiceID(codiceID);
+                personeTable.addRow(persona);
+            } catch (SQLException ex) {
+                new ErrorMessage(ex.getMessage());
             }
         });
     }

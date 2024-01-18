@@ -80,10 +80,7 @@
                           </component>
                           <component id="c856e" class="it.unisa.bd.progetto.gui.fields.ValidatedNumberSpinner" binding="durataTextField">
                             <constraints border-constraint="West"/>
-                            <properties>
-                              <columns value="10"/>
-                              <text value=""/>
-                            </properties>
+                            <properties/>
                           </component>
                         </children>
                       </grid>
@@ -107,9 +104,7 @@
                           </component>
                           <component id="aeb6f" class="it.unisa.bd.progetto.gui.fields.ValidatedNumberSpinner" binding="annoTextField">
                             <constraints border-constraint="Center"/>
-                            <properties>
-                              <columns value="10"/>
-                            </properties>
+                            <properties/>
                           </component>
                         </children>
                       </grid>
@@ -126,9 +121,7 @@
                           </component>
                           <component id="25ff" class="it.unisa.bd.progetto.gui.fields.ValidatedNumberSpinner" binding="etaMinimaTextField">
                             <constraints border-constraint="Center"/>
-                            <properties>
-                              <columns value="10"/>
-                            </properties>
+                            <properties/>
                           </component>
                         </children>
                       </grid>
