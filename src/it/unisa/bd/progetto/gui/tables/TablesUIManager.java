@@ -4,10 +4,6 @@ import it.unisa.bd.progetto.core.Database;
 import it.unisa.bd.progetto.core.Persona;
 import it.unisa.bd.progetto.core.TipoPersona;
 import it.unisa.bd.progetto.gui.errors.ErrorMessage;
-import it.unisa.bd.progetto.gui.tables.DatabaseTable;
-import it.unisa.bd.progetto.gui.tables.FilmTable;
-import it.unisa.bd.progetto.gui.tables.PersoneTable;
-import it.unisa.bd.progetto.gui.tables.RowData;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
@@ -15,7 +11,6 @@ import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.sql.SQLException;
-import java.util.List;
 
 public class TablesUIManager {
     private final JTabbedPane tabbedPane;
@@ -23,6 +18,7 @@ public class TablesUIManager {
     private final JButton deleteButton;
     private final JComboBox<String> registiComboBox;
 
+    @SafeVarargs
     public TablesUIManager(JTabbedPane tabbedPane, JButton deleteButton, JComboBox<String> registiComboBox, DatabaseTable<? extends RowData>... tables) {
         this.tabbedPane = tabbedPane;
         this.tables = tables;

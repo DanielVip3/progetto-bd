@@ -4,7 +4,6 @@ import it.unisa.bd.progetto.gui.tables.RowData;
 
 import java.security.InvalidParameterException;
 import java.time.Year;
-import java.time.format.DateTimeFormatter;
 
 public class Film implements RowData {
     private final int codice;

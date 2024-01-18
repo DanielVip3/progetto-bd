@@ -4,8 +4,6 @@ import javax.swing.*;
 import javax.swing.text.DateFormatter;
 import javax.swing.text.DefaultFormatterFactory;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class ValidatedDateField extends JFormattedTextField {
     public ValidatedDateField() {
