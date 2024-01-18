@@ -61,54 +61,18 @@ public class HomeForm {
         frame.setSize(new Dimension(600, 450));
     }
 
-    private DatabaseTable<? extends RowData> getCurrentTable() {
-        int selectedPane = tabbedPane.getSelectedIndex();
+    private void deleteButtonPress(DatabaseTable<? extends RowData> currentTable) {
 
-        return switch (selectedPane) {
-            default -> filmTable;
-            case 1 -> personeTable;
-        };
-    }
-
-    private void populateRegisti() {
-        try {
-            List<Persona> artisti = Database.getPersone(null, TipoPersona.ARTISTA);
-            artisti.forEach(r -> registaComboBox.addItem(r.toString()));
-        } catch(SQLException ex) {
-            new ErrorMessage(ex.getMessage());
-        }
-    }
-
-    private void populateCurrentSelectedPane(String search) {
-        DatabaseTable<? extends RowData> currentTable = getCurrentTable();
-
-        try {
-            if (currentTable instanceof FilmTable) {
-                currentTable.populate(Database.getFilms(search));
-                populateRegisti();
-            } else if (currentTable instanceof PersoneTable) currentTable.populate(Database.getPersone(search));
-        } catch (SQLException ex) {
-            new ErrorMessage(ex.getMessage());
-        }
     }
 
     public HomeForm() {
+        TablesUIManager tablesUIManager = new TablesUIManager(tabbedPane, new DatabaseTable[]{filmTable, personeTable}, deleteButton, registaComboBox);
+
         annoTextField.bounds(1900, Year.now().getValue() + 10, Year.now().getValue());
         durataTextField.bounds(1, 6000, 120);
         etaMinimaTextField.bounds(0, 18, 0);
 
-        populateRegisti();
-
-        try {
-            filmTable.initialize();
-            filmTable.populate(Database.getFilms());
-
-            personeTable.initialize();
-            personeTable.populate(Database.getPersone());
-        } catch (SQLException ex) {
-            new ErrorMessage(ex.getMessage());
-        }
-
+        /* Event 1: change of type in combobox changes shown additional text panel */
         tipoComboBox.addActionListener(e -> {
             String selectedItem = (String) tipoComboBox.getSelectedItem();
             if (selectedItem == null || selectedItem.isBlank() || selectedItem.isEmpty()) return;
@@ -128,43 +92,16 @@ public class HomeForm {
             }
         });
 
+        /* Event 2: on searching, populates table with filtered results */
         searchTextField.addActionListener(e -> {
             String text = searchTextField.getText();
-            populateCurrentSelectedPane(text);
+            tablesUIManager.populateTable(tablesUIManager.getCurrentTable(), text);
         });
 
-        tabbedPane.addChangeListener(e -> {
-            searchTextField.setText("");
-            populateCurrentSelectedPane(null);
-        });
+        /* Event 3: on tab change, resets search field */
+        tabbedPane.addChangeListener(e -> searchTextField.setText(""));
 
-        deleteButton.addActionListener(e -> {
-            DatabaseTable currentTable = getCurrentTable();
-            int selectedRow = currentTable.getSelectedRow();
-            if (selectedRow < 0) return;
-
-            try {
-                currentTable.delete(currentTable.getPrimaryKeyForRow(selectedRow));
-                currentTable.removeRow(selectedRow);
-            } catch (SQLException ex) {
-                new ErrorMessage(ex.getMessage());
-            }
-        });
-
-        FocusAdapter clearSelectionOnLostFocus = new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (e.getOppositeComponent() == null || !e.getOppositeComponent().equals(deleteButton)) ((JTable) e.getComponent()).clearSelection();
-            }
-        };
-
-        filmTable.addFocusListener(clearSelectionOnLostFocus);
-        personeTable.addFocusListener(clearSelectionOnLostFocus);
-
-        ListSelectionListener disableDeleteButtonIfNoSelection = e -> deleteButton.setEnabled(getCurrentTable().getSelectedRow() >= 0);
-        filmTable.getSelectionModel().addListSelectionListener(disableDeleteButtonIfNoSelection);
-        personeTable.getSelectionModel().addListSelectionListener(disableDeleteButtonIfNoSelection);
-
+        /* Event 4: on Film add, validate input and insert in database and in table */
         addFilmButton.addActionListener(e -> {
             if (!codiceTextField.canSubmit()) {
                 new ErrorMessage("Il codice inserito non è valido!");
@@ -194,6 +131,7 @@ public class HomeForm {
             }
         });
 
+        /* Event 5: on Persona add, validate input and insert in database and in table */
         addPersonaButton.addActionListener(e -> {
             String tipoString = (String) tipoComboBox.getSelectedItem();
             if (tipoString == null || tipoString.isBlank()) return;
@@ -230,6 +168,20 @@ public class HomeForm {
                 int codiceID = personeTable.insert(persona);
                 persona.setCodiceID(codiceID);
                 personeTable.addRow(persona);
+            } catch (SQLException ex) {
+                new ErrorMessage(ex.getMessage());
+            }
+        });
+
+        /* Event 6: on delete button press, delete in database and in table */
+        deleteButton.addActionListener(e -> {
+            DatabaseTable<? extends RowData> currentTable = tablesUIManager.getCurrentTable();
+            int selectedRow = currentTable.getSelectedRow();
+            if (selectedRow < 0) return;
+
+            try {
+                currentTable.delete(currentTable.getPrimaryKeyForRow(selectedRow));
+                currentTable.removeRow(selectedRow);
             } catch (SQLException ex) {
                 new ErrorMessage(ex.getMessage());
             }

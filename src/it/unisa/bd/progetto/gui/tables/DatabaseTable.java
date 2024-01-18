@@ -41,6 +41,8 @@ public abstract class DatabaseTable<T extends RowData> extends JTable {
         setModel(tableModel);
     }
 
+    public abstract void initialize();
+
     public String getDatabaseFieldFromColumnName(String columnName) {
         return columnsFields.get(columnName);
     }
