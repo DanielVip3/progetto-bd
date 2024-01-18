@@ -15,6 +15,7 @@ public abstract class DatabaseTable<T extends RowData> extends JTable {
         putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
         setAutoCreateRowSorter(true);
         getTableHeader().setReorderingAllowed(false);
+        setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         ValidatedTableModel tableModel = new ValidatedTableModel(columnsFields.keySet().toArray(), 0);
         setModel(tableModel);
