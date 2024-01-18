@@ -56,7 +56,7 @@ public class HomeForm {
     }
 
     public HomeForm() {
-        TablesUIManager tablesUIManager = new TablesUIManager(tabbedPane, new DatabaseTable[]{filmTable, personeTable}, deleteButton, registaComboBox);
+        TablesUIManager tablesUIManager = new TablesUIManager(tabbedPane, deleteButton, registaComboBox, filmTable, personeTable);
 
         durataSpinner.bounds(1, 6000, 120);
         annoSpinner.bounds(1900, Year.now().getValue() + 10, Year.now().getValue());

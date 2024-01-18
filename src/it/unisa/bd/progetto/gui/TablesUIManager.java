@@ -23,12 +23,11 @@ public class TablesUIManager {
     private final JButton deleteButton;
     private final JComboBox<String> registiComboBox;
 
-    public TablesUIManager(JTabbedPane tabbedPane, DatabaseTable<? extends RowData>[] tables, JButton deleteButton, JComboBox<String> registiComboBox) {
+    public TablesUIManager(JTabbedPane tabbedPane, JButton deleteButton, JComboBox<String> registiComboBox, DatabaseTable<? extends RowData>... tables) {
         this.tabbedPane = tabbedPane;
         this.tables = tables;
         this.deleteButton = deleteButton;
         this.registiComboBox = registiComboBox;
-
 
 
         /* Event 1: disable the delete button if there is no selected item in the table */
