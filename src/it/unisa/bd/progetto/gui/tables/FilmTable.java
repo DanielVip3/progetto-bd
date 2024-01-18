@@ -33,8 +33,6 @@ public class FilmTable extends DatabaseTable {
         columnModel.getColumn(3).setCellRenderer(centerRenderer);
         columnModel.getColumn(4).setMaxWidth(75);
         columnModel.getColumn(4).setCellRenderer(centerRenderer);
-
-        getDefaultEditor(String.class).addCellEditorListener(changeNotification);
     }
 
     public int insert(RowData film) throws SQLException {

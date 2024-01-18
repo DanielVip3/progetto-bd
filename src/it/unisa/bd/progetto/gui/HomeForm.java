@@ -16,7 +16,10 @@ import it.unisa.bd.progetto.gui.tables.PersoneTable;
 import it.unisa.bd.progetto.gui.tables.RowData;
 
 import javax.swing.*;
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
@@ -59,10 +62,6 @@ public class HomeForm {
         frame.pack();
         frame.setVisible(true);
         frame.setSize(new Dimension(600, 450));
-    }
-
-    private void deleteButtonPress(DatabaseTable<? extends RowData> currentTable) {
-
     }
 
     public HomeForm() {
@@ -173,7 +172,30 @@ public class HomeForm {
             }
         });
 
-        /* Event 6: on delete button press, delete in database and in table */
+        /* Event 6: on cell update, update in database too */
+        CellEditorListener changeNotification = new CellEditorListener() {
+            public void editingCanceled(ChangeEvent e) {}
+            public void editingStopped(ChangeEvent e) {
+                DatabaseTable<? extends RowData> table = tablesUIManager.getCurrentTable();
+                TableCellEditor editor = (TableCellEditor) e.getSource();
+
+                String newValue = (String) editor.getCellEditorValue();
+
+                String databaseField = table.getDatabaseFieldFromColumn(table.getSelectedColumn());
+                int primaryKey = table.getPrimaryKeyForRow(table.getSelectedRow());
+
+                try {
+                    table.update(primaryKey, databaseField, newValue);
+                } catch (SQLException ex) {
+                    new ErrorMessage(ex.getMessage());
+                }
+            }
+        };
+
+        filmTable.getDefaultEditor(String.class).addCellEditorListener(changeNotification);
+        personeTable.getDefaultEditor(String.class).addCellEditorListener(changeNotification);
+
+        /* Event 7: on delete button press, delete in database and in table */
         deleteButton.addActionListener(e -> {
             DatabaseTable<? extends RowData> currentTable = tablesUIManager.getCurrentTable();
             int selectedRow = currentTable.getSelectedRow();

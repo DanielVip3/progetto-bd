@@ -10,24 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class DatabaseTable<T extends RowData> extends JTable {
-    public CellEditorListener changeNotification = new CellEditorListener() {
-        public void editingCanceled(ChangeEvent e) {}
-        public void editingStopped(ChangeEvent e) {
-            TableCellEditor editor = (TableCellEditor) e.getSource();
-
-            String newValue = (String) editor.getCellEditorValue();
-            String databaseField = getDatabaseFieldFromColumn(getSelectedColumn());
-            int primaryKey = getPrimaryKeyForRow(getSelectedRow());
-
-            try {
-                update(primaryKey, databaseField, newValue);
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                System.exit(1);
-            }
-        }
-    };
-
     private Map<String, String> columnsFields; // pair <tableColumnName, dbField>
 
     protected void initialize(Map<String, String> columnNames) {

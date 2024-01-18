@@ -37,8 +37,6 @@ public class PersoneTable extends DatabaseTable {
         columnModel.getColumn(5).setCellRenderer(centerRenderer);
         columnModel.getColumn(6).setMaxWidth(75);
         columnModel.getColumn(6).setCellRenderer(centerRenderer);
-
-        getDefaultEditor(String.class).addCellEditorListener(changeNotification);
     }
 
     public int insert(RowData persona) throws SQLException {
