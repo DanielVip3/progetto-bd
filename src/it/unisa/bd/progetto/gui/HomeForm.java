@@ -11,10 +11,13 @@ import it.unisa.bd.progetto.gui.fields.ValidatedNumberSpinner;
 import it.unisa.bd.progetto.gui.fields.ValidatedTextField;
 import it.unisa.bd.progetto.gui.tables.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import java.awt.*;
+import java.awt.image.BaseMultiResolutionImage;
+import java.io.IOException;
 import java.security.InvalidParameterException;
 import java.sql.SQLException;
 import java.time.Year;
@@ -41,7 +44,7 @@ public class HomeForm {
     private JButton addFilmButton;
     private JButton addPersonaButton;
     private ValidatedNumberField additionalPersonaTextField;
-
+    private JLabel searchLabel;
 
     public static void main(String[] args) {
         FlatMacLightLaf.setup();
@@ -55,7 +58,20 @@ public class HomeForm {
         frame.setSize(new Dimension(700, 500));
     }
 
+    private void setIcons() {
+        try {
+            searchLabel.setIcon(new ImageIcon(new BaseMultiResolutionImage(
+                ImageIO.read(ClassLoader.getSystemResource("assets/search-25.png")),
+                ImageIO.read(ClassLoader.getSystemResource("assets/search-33.png")),
+                ImageIO.read(ClassLoader.getSystemResource("assets/search-39.png")),
+                ImageIO.read(ClassLoader.getSystemResource("assets/search-50.png"))
+            )));
+        } catch (IOException ex) { /* ignore */ }
+    }
+
     public HomeForm() {
+        setIcons();
+
         TablesUIManager tablesUIManager = new TablesUIManager(tabbedPane, deleteButton, registaComboBox, filmTable, personeTable);
 
         durataSpinner.bounds(1, 6000, 120);
