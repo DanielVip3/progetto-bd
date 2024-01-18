@@ -43,8 +43,8 @@ public class Database {
         while (rs.next()) {
             films.add(new Film(
                 rs.getInt("Codice"), rs.getString("Titolo"),
-                rs.getShort("Anno"), rs.getShort("Durata"),
-                rs.getShort("EtàMinima"), rs.getString("NomeRegista")
+                rs.getInt("Anno"), rs.getInt("Durata"),
+                rs.getInt("EtàMinima"), rs.getString("NomeRegista")
             ));
         }
 
@@ -108,9 +108,9 @@ public class Database {
 
         statement.setInt(1, film.getCodice());
         statement.setString(2, film.getTitolo());
-        statement.setShort(3, film.getDurata());
-        statement.setShort(4, film.getAnno());
-        statement.setShort(5, film.getEtaMinima());
+        statement.setInt(3, film.getDurata());
+        statement.setInt(4, film.getAnno());
+        statement.setInt(5, film.getEtaMinima());
 
         if (codiceRegista != null) statement.setInt(6, codiceRegista);
         else statement.setNull(6, java.sql.Types.NULL);

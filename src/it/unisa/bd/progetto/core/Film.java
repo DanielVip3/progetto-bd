@@ -1,17 +1,17 @@
 package it.unisa.bd.progetto.core;
 
-import it.unisa.bd.progetto.gui.RowData;
+import it.unisa.bd.progetto.gui.tables.RowData;
 
 public class Film implements RowData {
     private final int codice;
     private final String titolo;
-    private final short anno;
-    private final short durata;
-    private final short etaMinima;
+    private final int anno;
+    private final int durata;
+    private final int etaMinima;
     private final String regista;
 
 
-    public Film(int codice, String titolo, short anno, short durata, short etaMinima, String regista) {
+    public Film(int codice, String titolo, int anno, int durata, int etaMinima, String regista) {
         this.codice = codice;
         this.titolo = titolo;
         this.anno = anno;
@@ -28,15 +28,15 @@ public class Film implements RowData {
         return titolo;
     }
 
-    public short getAnno() {
+    public int getAnno() {
         return anno;
     }
 
-    public short getDurata() {
+    public int getDurata() {
         return durata;
     }
 
-    public short getEtaMinima() {
+    public int getEtaMinima() {
         return etaMinima;
     }
 

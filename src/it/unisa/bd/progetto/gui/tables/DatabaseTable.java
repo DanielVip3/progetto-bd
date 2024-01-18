@@ -1,4 +1,4 @@
-package it.unisa.bd.progetto.gui;
+package it.unisa.bd.progetto.gui.tables;
 
 import javax.swing.*;
 import javax.swing.event.CellEditorListener;

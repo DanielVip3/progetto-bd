@@ -1,6 +1,6 @@
 package it.unisa.bd.progetto.core;
 
-import it.unisa.bd.progetto.gui.RowData;
+import it.unisa.bd.progetto.gui.tables.RowData;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

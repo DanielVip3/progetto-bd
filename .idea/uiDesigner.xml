@@ -121,10 +121,22 @@
       </item>
     </group>
     <group name="Custom">
-      <item class="it.unisa.bd.progetto.gui.FilmTable" icon="/com/intellij/uiDesigner/icons/table.svg" removable="true" auto-create-binding="true" can-attach-label="false">
+      <item class="it.unisa.bd.progetto.gui.tables.FilmTable" icon="/com/intellij/uiDesigner/icons/table.svg" removable="true" auto-create-binding="true" can-attach-label="false">
         <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="0" />
       </item>
-      <item class="it.unisa.bd.progetto.gui.PersoneTable" icon="/com/intellij/uiDesigner/icons/table.svg" removable="true" auto-create-binding="true" can-attach-label="false">
+      <item class="it.unisa.bd.progetto.gui.tables.PersoneTable" icon="/com/intellij/uiDesigner/icons/table.svg" removable="true" auto-create-binding="true" can-attach-label="false">
+        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="0" />
+      </item>
+      <item class="it.unisa.bd.progetto.gui.fields.ValidatedNumberField" icon="/com/intellij/uiDesigner/icons/formattedTextField.svg" removable="true" auto-create-binding="true" can-attach-label="false">
+        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="0" />
+      </item>
+      <item class="it.unisa.bd.progetto.gui.fields.ValidatedDateField" icon="/com/intellij/uiDesigner/icons/formattedTextField.svg" removable="true" auto-create-binding="true" can-attach-label="false">
+        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="0" />
+      </item>
+      <item class="it.unisa.bd.progetto.gui.fields.ValidatedTextField" icon="/com/intellij/uiDesigner/icons/formattedTextField.svg" removable="true" auto-create-binding="true" can-attach-label="false">
+        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="0" />
+      </item>
+      <item class="it.unisa.bd.progetto.gui.fields.ValidatedNumberSpinner" icon="/com/intellij/uiDesigner/icons/spinner.svg" removable="true" auto-create-binding="false" can-attach-label="false">
         <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="0" />
       </item>
     </group>

@@ -5,6 +5,14 @@ import it.unisa.bd.progetto.core.Database;
 import it.unisa.bd.progetto.core.Film;
 import it.unisa.bd.progetto.core.Persona;
 import it.unisa.bd.progetto.core.TipoPersona;
+import it.unisa.bd.progetto.gui.errors.ErrorMessage;
+import it.unisa.bd.progetto.gui.fields.ValidatedDateField;
+import it.unisa.bd.progetto.gui.fields.ValidatedNumberField;
+import it.unisa.bd.progetto.gui.fields.ValidatedNumberSpinner;
+import it.unisa.bd.progetto.gui.fields.ValidatedTextField;
+import it.unisa.bd.progetto.gui.tables.DatabaseTable;
+import it.unisa.bd.progetto.gui.tables.FilmTable;
+import it.unisa.bd.progetto.gui.tables.PersoneTable;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -18,32 +26,31 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.Year;
 import java.util.List;
 
 public class HomeForm {
     private JTabbedPane tabbedPane;
     private JPanel root;
-    private JTextField codiceTextField;
-    private JTextField titoloTextField;
-    private JTextField annoTextField;
-    private JTextField durataTextField;
-    private JTextField etaMinimaTextField;
+    private ValidatedNumberField codiceTextField;
+    private ValidatedTextField titoloTextField;
+    private ValidatedNumberSpinner annoTextField;
+    private ValidatedNumberSpinner durataTextField;
+    private ValidatedNumberSpinner etaMinimaTextField;
     private JComboBox<String> registaComboBox;
     private JComboBox<String> tipoComboBox;
-    private JTextField dataDiNascitaTextField;
-    private JTextField cognomeTextField;
-    private JTextField nomeTextField;
+    private ValidatedDateField dataDiNascitaTextField;
+    private ValidatedTextField cognomeTextField;
+    private ValidatedTextField nomeTextField;
     private JPanel additionalPersonaPanel;
     private JLabel additionalPersonaPanelLabel;
     private JTextField searchTextField;
-    private JLabel searchLabel;
     private FilmTable filmTable;
     private PersoneTable personeTable;
     private JButton deleteButton;
     private JButton addFilmButton;
     private JButton addPersonaButton;
-    private JTextField additionalPersonaPanelTextField;
+    private ValidatedNumberField additionalPersonaPanelTextField;
 
     private ListSelectionListener disableDeleteButtonIfNoSelection = new ListSelectionListener() {
         public void valueChanged(ListSelectionEvent e) {
@@ -52,7 +59,7 @@ public class HomeForm {
     };
 
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         FlatMacLightLaf.setup();
         UIManager.put("Table.alternateRowColor", new Color(215,225,238));
 
@@ -73,26 +80,44 @@ public class HomeForm {
         };
     }
 
+    private void populateRegisti() {
+        try {
+            List<Persona> artisti = Database.getPersone(null, TipoPersona.ARTISTA);
+            artisti.forEach(r -> registaComboBox.addItem(r.toString()));
+        } catch(SQLException ex) {
+            new ErrorMessage(ex.getMessage());
+        }
+    }
+
     private void populateCurrentSelectedPane(String search) {
         DatabaseTable currentTable = getCurrentTable();
 
         try {
-            if (currentTable instanceof FilmTable) currentTable.populate(Database.getFilms(search));
-            else if (currentTable instanceof PersoneTable) currentTable.populate(Database.getPersone(search));
+            if (currentTable instanceof FilmTable) {
+                currentTable.populate(Database.getFilms(search));
+                populateRegisti();
+            } else if (currentTable instanceof PersoneTable) currentTable.populate(Database.getPersone(search));
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            new ErrorMessage(ex.getMessage());
         }
     }
 
-    public HomeForm() throws SQLException {
-        List<Persona> artisti = Database.getPersone(null, TipoPersona.ARTISTA);
-        artisti.forEach(r -> registaComboBox.addItem(r.toString()));
+    public HomeForm() {
+        annoTextField.bounds(1900, Year.now().getValue() + 10, Year.now().getValue());
+        durataTextField.bounds(1, 6000, 120);
+        etaMinimaTextField.bounds(0, 18, 0);
 
-        filmTable.initialize();
-        filmTable.populate(Database.getFilms());
+        populateRegisti();
 
-        personeTable.initialize();
-        personeTable.populate(Database.getPersone());
+        try {
+            filmTable.initialize();
+            filmTable.populate(Database.getFilms());
+
+            personeTable.initialize();
+            personeTable.populate(Database.getPersone());
+        } catch (SQLException ex) {
+            new ErrorMessage(ex.getMessage());
+        }
 
         tipoComboBox.addActionListener(new ActionListener() {
             @Override
@@ -143,7 +168,7 @@ public class HomeForm {
                     currentTable.delete(currentTable.getPrimaryKeyForRow(selectedRow));
                     currentTable.removeRow(selectedRow);
                 } catch (SQLException ex) {
-                    ex.printStackTrace();
+                    new ErrorMessage(ex.getMessage());
                 }
             }
         });
@@ -168,11 +193,23 @@ public class HomeForm {
         addFilmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int codice = Integer.parseInt(codiceTextField.getText());
-                String titolo = titoloTextField.getText();
-                short durata = Short.parseShort(durataTextField.getText());
-                short anno = Short.parseShort(annoTextField.getText());
-                short etaMinima = Short.parseShort(etaMinimaTextField.getText());
+                if (!codiceTextField.canSubmit()) {
+                    new ErrorMessage("Il codice inserito non è valido!");
+                    return;
+                }
+                int codice = codiceTextField.getContent();
+
+                if (!titoloTextField.canSubmit()) {
+                    new ErrorMessage("Il titolo inserito non è valido (stringa compresa tra 1 e 45 caratteri)!");
+                    return;
+                }
+                String titolo = titoloTextField.getContent();
+
+                /* Always valid because spinner can never be invalid */
+                int durata = durataTextField.getContent();
+                int anno = annoTextField.getContent();
+                int etaMinima = etaMinimaTextField.getContent();
+
                 String regista = (String) registaComboBox.getSelectedItem();
                 Film film = new Film(codice, titolo, durata, anno, etaMinima, regista);
 
@@ -180,7 +217,7 @@ public class HomeForm {
                     filmTable.insert(film);
                     filmTable.addRow(film);
                 } catch (SQLException ex) {
-                    ex.printStackTrace();
+                    new ErrorMessage(ex.getMessage());
                 }
             }
         });
@@ -191,13 +228,32 @@ public class HomeForm {
                 String tipoString = (String) tipoComboBox.getSelectedItem();
                 if (tipoString == null || tipoString.isBlank()) return;
 
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                if (!nomeTextField.canSubmit()) {
+                    new ErrorMessage("Il nome inserito non è valido (stringa compresa tra 1 e 45 caratteri)!");
+                    return;
+                }
+                String nome = nomeTextField.getContent();
 
-                String nome = nomeTextField.getText();
-                String cognome = cognomeTextField.getText();
-                LocalDate dataDiNascita = LocalDate.parse(dataDiNascitaTextField.getText(), formatter);
+                if (!cognomeTextField.canSubmit()) {
+                    new ErrorMessage("Il cognome inserito non è valido (stringa compresa tra 1 e 45 caratteri)!");
+                    return;
+                }
+                String cognome = cognomeTextField.getContent();
+
+                if (!dataDiNascitaTextField.canSubmit()) {
+                    new ErrorMessage("La data inserita non è valida!");
+                    return;
+                }
+                LocalDate dataDiNascita = dataDiNascitaTextField.getContent();
                 TipoPersona tipo = TipoPersona.fromString((String) tipoComboBox.getSelectedItem());
-                Integer additionalInfo = tipo != TipoPersona.CLIENTE ? Integer.parseInt(additionalPersonaPanelTextField.getText()) : null;
+
+                if (tipo != TipoPersona.CLIENTE && !additionalPersonaPanelTextField.canSubmit()) {
+                    if (tipo == TipoPersona.ARTISTA) new ErrorMessage("Il numero di premi inserito non è valido!");
+                    else new ErrorMessage("La matricola inserita non è valida!");
+                    return;
+                }
+                Integer additionalInfo = tipo != TipoPersona.CLIENTE ? additionalPersonaPanelTextField.getContent() : null;
+
                 Persona persona = new Persona(-1, tipo, nome, cognome, dataDiNascita, additionalInfo);
 
                 try {
@@ -205,7 +261,7 @@ public class HomeForm {
                     persona.setCodiceID(codiceID);
                     personeTable.addRow(persona);
                 } catch (SQLException ex) {
-                    ex.printStackTrace();
+                    new ErrorMessage(ex.getMessage());
                 }
             }
         });
