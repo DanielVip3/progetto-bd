@@ -1,4 +1,4 @@
-package it.unisa.bd.progetto.gui;
+package it.unisa.bd.progetto.gui.tables;
 
 import it.unisa.bd.progetto.core.Database;
 import it.unisa.bd.progetto.core.Persona;
