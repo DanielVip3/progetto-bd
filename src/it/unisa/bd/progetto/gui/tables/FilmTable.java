@@ -10,7 +10,7 @@ import java.security.InvalidParameterException;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 
-public class FilmTable extends DatabaseTable {
+public class FilmTable extends DatabaseTable<Film> {
     public void initialize() {
         LinkedHashMap<String, String> columnFields = new LinkedHashMap<>();
         columnFields.put("Codice", "Codice");
@@ -38,13 +38,13 @@ public class FilmTable extends DatabaseTable {
         columnModel.getColumn(5).setCellRenderer(centerRenderer);
     }
 
-    public int insert(RowData film) throws SQLException {
-        Database.insertFilm((Film) film);
+    public int insert(Film film) throws SQLException {
+        Database.insertFilm(film);
         return 0;
     }
 
-    public void update(RowData film) throws SQLException, InvalidParameterException {
-        Database.updateFilm((Film) film);
+    public void update(Film film) throws SQLException, InvalidParameterException {
+        Database.updateFilm(film);
     }
 
     public void delete(int primaryKey) throws SQLException {

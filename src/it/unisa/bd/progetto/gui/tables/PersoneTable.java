@@ -10,7 +10,7 @@ import java.security.InvalidParameterException;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 
-public class PersoneTable extends DatabaseTable {
+public class PersoneTable extends DatabaseTable<Persona> {
     public void initialize() {
         LinkedHashMap<String, String> columnFields = new LinkedHashMap<>();
         columnFields.put("Codice ID", "CodiceID");
@@ -41,12 +41,12 @@ public class PersoneTable extends DatabaseTable {
         columnModel.getColumn(6).setCellRenderer(centerRenderer);
     }
 
-    public int insert(RowData persona) throws SQLException {
-        return Database.insertPersona((Persona) persona);
+    public int insert(Persona persona) throws SQLException {
+        return Database.insertPersona(persona);
     }
 
-    public void update(RowData persona) throws SQLException, InvalidParameterException {
-        Database.updatePersona((Persona) persona);
+    public void update(Persona persona) throws SQLException, InvalidParameterException {
+        Database.updatePersona(persona);
     }
 
     public void delete(int primaryKey) throws SQLException {
