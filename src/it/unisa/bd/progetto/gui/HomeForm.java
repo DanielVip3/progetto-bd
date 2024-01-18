@@ -55,7 +55,37 @@ public class HomeForm {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(new Dimension(700, 500));
+        frame.setSize(new Dimension(700, 520));
+    }
+
+    private static CellEditorListener createUpdateListener(DatabaseTable<? extends RowData> table) {
+        return new CellEditorListener() {
+            public void editingCanceled(ChangeEvent e) {}
+            public void editingStopped(ChangeEvent e) {
+                int row = table.getSelectedRow();
+                int column = table.getSelectedColumn();
+
+                /* We can safely assume 6 for now since both tables have up to 6 fields, if needed in the future we can change with list and make it table-dependent */
+                String[] fields = new String[6];
+                for (int i = 0; i < 6; i++) fields[i] = (String) table.getValueAt(row, i);
+
+                try {
+                    if (table instanceof FilmTable) {
+                        ((FilmTable) table).update(Film.fromRow(fields));
+
+                        if (column == 4) { // if Tipo was edited, we reset the additional fields (they were set to null in database too)
+                            table.setValueAt("-", row, 5);
+                            table.setValueAt("-", row, 6);
+                        }
+                    } else if (table instanceof PersoneTable) {
+                        ((PersoneTable) table).update(Persona.fromRow(fields));
+                    }
+                } catch (SQLException | InvalidParameterException ex) {
+                    new ErrorMessage(ex.getMessage());
+                    table.resetLastEdit(row, column);
+                }
+            }
+        };
     }
 
     private void setIcons() {
@@ -149,47 +179,10 @@ public class HomeForm {
         });
 
         /* Event 6: on Film cell update, update in database too; on error reset edit */
-        filmTable.getDefaultEditor(String.class).addCellEditorListener(new CellEditorListener() {
-            public void editingCanceled(ChangeEvent e) {}
-            public void editingStopped(ChangeEvent e) {
-                int row = filmTable.getSelectedRow();
-                int column = filmTable.getSelectedColumn();
-
-                String[] fields = new String[6];
-                for (int i = 0; i < 6; i++) fields[i] = (String) filmTable.getValueAt(row, i);
-
-                try {
-                    filmTable.update(Film.fromRow(fields));
-                } catch (SQLException | InvalidParameterException ex) {
-                    new ErrorMessage(ex.getMessage());
-                    filmTable.resetLastEdit(row, column);
-                }
-            }
-        });
+        filmTable.getDefaultEditor(String.class).addCellEditorListener(createUpdateListener(filmTable));
 
         /* Event 7: on Persona cell update, update in database too; on error reset edit */
-        personeTable.getDefaultEditor(String.class).addCellEditorListener(new CellEditorListener() {
-            public void editingCanceled(ChangeEvent e) {}
-            public void editingStopped(ChangeEvent e) {
-                int row = personeTable.getSelectedRow();
-                int column = personeTable.getSelectedColumn();
-
-                String[] fields = new String[6];
-                for (int i = 0; i < 6; i++) fields[i] = (String) personeTable.getValueAt(row, i);
-
-                try {
-                    personeTable.update(Persona.fromRow(fields));
-
-                    if (column == 4) { // if edited Tipo, we reset the additional fields (they will be set to null in database too)
-                        personeTable.setValueAt("-", row, 5);
-                        personeTable.setValueAt("-", row, 6);
-                    }
-                } catch (SQLException | InvalidParameterException ex) {
-                    new ErrorMessage(ex.getMessage());
-                    personeTable.resetLastEdit(row, column);
-                }
-            }
-        });
+        personeTable.getDefaultEditor(String.class).addCellEditorListener(createUpdateListener(personeTable));
 
         /* Event 8: on delete button press, delete in database and in table */
         deleteButton.addActionListener(e -> {
