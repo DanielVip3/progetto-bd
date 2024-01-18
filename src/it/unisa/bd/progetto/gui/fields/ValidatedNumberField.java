@@ -5,7 +5,7 @@ import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.NumberFormatter;
 import java.text.NumberFormat;
 
-public class ValidatedNumberField extends JFormattedTextField implements ValidatedField<Integer> {
+public class ValidatedNumberField extends JFormattedTextField {
     private final NumberFormatter formatter = new NumberFormatter();
 
     public ValidatedNumberField() {
@@ -24,13 +24,5 @@ public class ValidatedNumberField extends JFormattedTextField implements Validat
         formatter.setMinimum(minimum);
         formatter.setMaximum(maximum);
         setFormatterFactory(new DefaultFormatterFactory(formatter));
-    }
-
-    public boolean canSubmit() {
-        return isEditValid() && !getText().isBlank();
-    }
-
-    public Integer getContent() {
-        return Integer.parseInt(getText());
     }
 }

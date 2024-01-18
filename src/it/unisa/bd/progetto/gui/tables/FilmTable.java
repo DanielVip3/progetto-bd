@@ -6,6 +6,7 @@ import it.unisa.bd.progetto.core.Film;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
+import java.security.InvalidParameterException;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 
@@ -40,8 +41,8 @@ public class FilmTable extends DatabaseTable {
         return 0;
     }
 
-    public void update(int primaryKey, String field, String newValue) throws SQLException {
-        Database.updateFilm(primaryKey, field, newValue);
+    public void update(RowData film) throws SQLException, InvalidParameterException {
+        Database.updateFilm((Film) film);
     }
 
     public void delete(int primaryKey) throws SQLException {

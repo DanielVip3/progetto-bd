@@ -2,7 +2,7 @@ package it.unisa.bd.progetto.gui.fields;
 
 import javax.swing.*;
 
-public class ValidatedNumberSpinner extends JSpinner implements ValidatedField<Integer> {
+public class ValidatedNumberSpinner extends JSpinner {
     public ValidatedNumberSpinner() {
         JSpinner.NumberEditor editor = new JSpinner.NumberEditor(this);
         editor.getFormat().setGroupingUsed(false);
@@ -16,11 +16,5 @@ public class ValidatedNumberSpinner extends JSpinner implements ValidatedField<I
         model.setMaximum(maximum);
         model.setStepSize(1);
         setModel(model);
-    }
-
-    public boolean canSubmit() { return true; }
-
-    public Integer getContent() {
-        return (Integer) getValue();
     }
 }

@@ -11,6 +11,7 @@ import it.unisa.bd.progetto.gui.tables.RowData;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.sql.SQLException;
@@ -33,11 +34,14 @@ public class TablesUIManager {
         /* Event 1: disable the delete button if there is no selected item in the table */
         ListSelectionListener disableDeleteButtonIfNoSelection = e -> deleteButton.setEnabled(getCurrentTable().getSelectedRow() >= 0);
 
-        /* Event 2: when a table loses focus, we clear the selection */
+        /* Event 2: when a table loses focus, we clear the selection, except if it's being given to table itself or delete button */
         FocusAdapter clearSelectionOnLostFocus = new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
-                if (e.getOppositeComponent() == null || !e.getOppositeComponent().equals(deleteButton)) ((JTable) e.getComponent()).clearSelection();
+                Component clicked = e.getOppositeComponent();
+                if (clicked != null && (clicked.equals(deleteButton) || clicked.getParent() instanceof JTable)) return;
+
+                ((JTable) e.getComponent()).clearSelection();
             }
         };
 

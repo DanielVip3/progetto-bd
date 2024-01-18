@@ -1,5 +1,6 @@
 package it.unisa.bd.progetto.core;
 
+import java.security.InvalidParameterException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -23,6 +24,24 @@ public class Database {
 
     public static Connection getConnection() {
         return connection;
+    }
+
+    public static Integer getCodiceRegista(String regista) throws SQLException, InvalidParameterException {
+        Integer codiceRegista = null;
+
+        if (!regista.equals("Sconosciuto")) {
+            PreparedStatement statement = getConnection().prepareStatement("SELECT CodiceID From Persona WHERE CONCAT(Nome, ' ', Cognome) = ?");
+            statement.setString(1, regista);
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                codiceRegista = rs.getInt("CodiceID");
+            } else {
+                throw new InvalidParameterException("Il regista cercato non esiste.");
+            }
+        }
+
+        return codiceRegista;
     }
 
     public static List<Film> getFilms() throws SQLException {
@@ -71,10 +90,9 @@ public class Database {
             if (filterType != null && type != filterType) continue;
 
             persone.add(new Persona(
-                rs.getInt("CodiceID"), type,
-                rs.getString("Nome"), rs.getString("Cognome"),
+                rs.getInt("CodiceID"), rs.getString("Nome"), rs.getString("Cognome"),
                 LocalDate.parse(rs.getString("DataDiNascita"), DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss")),
-                switch (type) {
+                type, switch (type) {
                     default -> null;
                     case ARTISTA -> rs.getInt("NumeroPremiVinti");
                     case IMPIEGATO -> rs.getInt("Matricola");
@@ -85,23 +103,10 @@ public class Database {
         return persone;
     }
 
-    public static void insertFilm(Film film) throws SQLException {
-        PreparedStatement statement;
-        Integer codiceRegista = null;
+    public static void insertFilm(Film film) throws SQLException, InvalidParameterException {
+        Integer codiceRegista = getCodiceRegista(film.getRegista());
 
-        if (!film.getRegista().equals("Sconosciuto")) {
-            statement = getConnection().prepareStatement("SELECT CodiceID From Persona WHERE CONCAT(Nome, ' ', Cognome) = ?");
-            statement.setString(1, film.getRegista());
-            ResultSet rs = statement.executeQuery();
-
-            if (rs.next()) {
-                codiceRegista = rs.getInt("CodiceID");
-            } else {
-                throw new RuntimeException("Il regista cercato non esiste.");
-            }
-        }
-
-        statement = getConnection().prepareStatement(
+        PreparedStatement statement = getConnection().prepareStatement(
         "INSERT INTO Film (Codice, Titolo, Durata, Anno, EtàMinima, Regista) " +
             "VALUES (?, ?, ?, ?, ?, ?);"
         );
@@ -143,17 +148,47 @@ public class Database {
         else return -1;
     }
 
-    public static void updateFilm(int codice, String column, String value) throws SQLException {
-        PreparedStatement statement = getConnection().prepareStatement("UPDATE Film SET " + column + " = ? WHERE Codice = ?;");
-        statement.setString(1, value);
-        statement.setInt(2, codice);
+    public static void updateFilm(Film film) throws SQLException, InvalidParameterException {
+        Integer codiceRegista = getCodiceRegista(film.getRegista());
+
+        PreparedStatement statement = getConnection().prepareStatement(
+        "UPDATE Film " +
+            "SET Titolo = ?, Durata = ?, Anno = ?, EtàMinima = ?, Regista = ? " +
+            "WHERE Codice = ?;"
+        );
+
+        statement.setString(1, film.getTitolo());
+        statement.setInt(2, film.getDurata());
+        statement.setInt(3, film.getAnno());
+        statement.setInt(4, film.getEtaMinima());
+
+        if (codiceRegista != null) statement.setInt(5, codiceRegista);
+        else statement.setNull(5, java.sql.Types.NULL);
+
+        statement.setInt(6, film.getCodice());
+
         statement.execute();
     }
 
-    public static void updatePersona(int codiceID, String column, String value) throws SQLException {
-        PreparedStatement statement = getConnection().prepareStatement("UPDATE Persona SET " + column + " = ? WHERE CodiceID = ?;");
-        statement.setString(1, value);
-        statement.setInt(2, codiceID);
+    public static void updatePersona(Persona persona) throws SQLException {
+        PreparedStatement statement = getConnection().prepareStatement(
+        "UPDATE Persona " +
+            "SET Tipo = ?, Nome = ?, Cognome = ?, DataDiNascita = ?, NumeroPremiVinti = ?, Matricola = ? " +
+            "WHERE CodiceID = ?;"
+        );
+
+        statement.setString(1, persona.getTipo().toString());
+        statement.setString(2, persona.getNome());
+        statement.setString(3, persona.getCognome());
+        statement.setDate(4, Date.valueOf(persona.getDataDiNascita()));
+
+        if (persona.getTipo() == TipoPersona.ARTISTA) statement.setInt(5, persona.getNumeroPremiVinti());
+        else statement.setNull(5, java.sql.Types.NULL);
+
+        if (persona.getTipo() == TipoPersona.IMPIEGATO) statement.setInt(6, persona.getMatricola());
+        else statement.setNull(6, java.sql.Types.NULL);
+
+        statement.setInt(7, persona.getCodiceID());
         statement.execute();
     }
 

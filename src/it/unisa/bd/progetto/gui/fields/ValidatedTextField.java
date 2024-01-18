@@ -2,7 +2,7 @@ package it.unisa.bd.progetto.gui.fields;
 
 import javax.swing.*;
 
-public class ValidatedTextField extends JFormattedTextField implements ValidatedField<String> {
+public class ValidatedTextField extends JFormattedTextField {
     private int minLength;
     private int maxLength;
 
@@ -18,13 +18,5 @@ public class ValidatedTextField extends JFormattedTextField implements Validated
     public void bounds(int min, int max) {
         minLength = min;
         maxLength = max;
-    }
-
-    public boolean canSubmit() {
-        return !getText().isBlank() && getText().length() >= minLength && getText().length() <= maxLength;
-    }
-
-    public String getContent() {
-        return getText();
     }
 }

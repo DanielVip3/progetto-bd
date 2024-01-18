@@ -10,10 +10,7 @@ import it.unisa.bd.progetto.gui.fields.ValidatedDateField;
 import it.unisa.bd.progetto.gui.fields.ValidatedNumberField;
 import it.unisa.bd.progetto.gui.fields.ValidatedNumberSpinner;
 import it.unisa.bd.progetto.gui.fields.ValidatedTextField;
-import it.unisa.bd.progetto.gui.tables.DatabaseTable;
-import it.unisa.bd.progetto.gui.tables.FilmTable;
-import it.unisa.bd.progetto.gui.tables.PersoneTable;
-import it.unisa.bd.progetto.gui.tables.RowData;
+import it.unisa.bd.progetto.gui.tables.*;
 
 import javax.swing.*;
 import javax.swing.event.CellEditorListener;
@@ -23,9 +20,11 @@ import javax.swing.table.TableCellEditor;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.security.InvalidParameterException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeForm {
@@ -61,7 +60,7 @@ public class HomeForm {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        frame.setSize(new Dimension(600, 450));
+        frame.setSize(new Dimension(650, 450));
     }
 
     public HomeForm() {
@@ -102,100 +101,84 @@ public class HomeForm {
 
         /* Event 4: on Film add, validate input and insert in database and in table */
         addFilmButton.addActionListener(e -> {
-            if (!codiceTextField.canSubmit()) {
-                new ErrorMessage("Il codice inserito non è valido!");
-                return;
-            }
-            int codice = codiceTextField.getContent();
-
-            if (!titoloTextField.canSubmit()) {
-                new ErrorMessage("Il titolo inserito non è valido (stringa compresa tra 1 e 45 caratteri)!");
-                return;
-            }
-            String titolo = titoloTextField.getContent();
-
-            /* Always valid because spinner can never be invalid */
-            int durata = durataTextField.getContent();
-            int anno = annoTextField.getContent();
-            int etaMinima = etaMinimaTextField.getContent();
-
+            String codice = codiceTextField.getText();
+            String titolo = titoloTextField.getText();
+            String durata = durataTextField.getValue().toString();
+            String anno = annoTextField.getValue().toString();
+            String etaMinima = etaMinimaTextField.getValue().toString();
             String regista = (String) registaComboBox.getSelectedItem();
-            Film film = new Film(codice, titolo, durata, anno, etaMinima, regista);
 
             try {
+                // Using fromRow and not normal constructor because in this way we also do validation
+                Film film = Film.fromRow(new String[]{codice, titolo, durata, anno, etaMinima, regista});
                 filmTable.insert(film);
+
                 filmTable.addRow(film);
-            } catch (SQLException ex) {
+            } catch (SQLException | InvalidParameterException ex) {
                 new ErrorMessage(ex.getMessage());
             }
         });
 
         /* Event 5: on Persona add, validate input and insert in database and in table */
         addPersonaButton.addActionListener(e -> {
-            String tipoString = (String) tipoComboBox.getSelectedItem();
-            if (tipoString == null || tipoString.isBlank()) return;
-
-            if (!nomeTextField.canSubmit()) {
-                new ErrorMessage("Il nome inserito non è valido (stringa compresa tra 1 e 45 caratteri)!");
-                return;
-            }
-            String nome = nomeTextField.getContent();
-
-            if (!cognomeTextField.canSubmit()) {
-                new ErrorMessage("Il cognome inserito non è valido (stringa compresa tra 1 e 45 caratteri)!");
-                return;
-            }
-            String cognome = cognomeTextField.getContent();
-
-            if (!dataDiNascitaTextField.canSubmit()) {
-                new ErrorMessage("La data inserita non è valida!");
-                return;
-            }
-            LocalDate dataDiNascita = dataDiNascitaTextField.getContent();
+            String nome = nomeTextField.getText();
+            String cognome = cognomeTextField.getText();
+            String dataDiNascita = dataDiNascitaTextField.getText();
+            String additionalField = additionalPersonaPanelTextField.getText();
             TipoPersona tipo = TipoPersona.fromString((String) tipoComboBox.getSelectedItem());
 
-            if (tipo != TipoPersona.CLIENTE && !additionalPersonaPanelTextField.canSubmit()) {
-                if (tipo == TipoPersona.ARTISTA) new ErrorMessage("Il numero di premi inserito non è valido!");
-                else new ErrorMessage("La matricola inserita non è valida!");
-                return;
-            }
-            Integer additionalInfo = tipo != TipoPersona.CLIENTE ? additionalPersonaPanelTextField.getContent() : null;
-
-            Persona persona = new Persona(-1, tipo, nome, cognome, dataDiNascita, additionalInfo);
-
             try {
+                // Using fromRow and not normal constructor because in this way we also do validation
+                Persona persona = Persona.fromRow(new String[]{"0", nome, cognome, dataDiNascita, tipo.toString(), additionalField});
                 int codiceID = personeTable.insert(persona);
+
                 persona.setCodiceID(codiceID);
+
                 personeTable.addRow(persona);
-            } catch (SQLException ex) {
+            } catch (SQLException | InvalidParameterException ex) {
                 new ErrorMessage(ex.getMessage());
             }
         });
 
-        /* Event 6: on cell update, update in database too */
-        CellEditorListener changeNotification = new CellEditorListener() {
+        /* Event 6: on Film cell update, update in database too; on error reset edit */
+        filmTable.getDefaultEditor(String.class).addCellEditorListener(new CellEditorListener() {
             public void editingCanceled(ChangeEvent e) {}
             public void editingStopped(ChangeEvent e) {
-                DatabaseTable<? extends RowData> table = tablesUIManager.getCurrentTable();
-                TableCellEditor editor = (TableCellEditor) e.getSource();
+                int row = filmTable.getSelectedRow();
+                int column = filmTable.getSelectedColumn();
 
-                String newValue = (String) editor.getCellEditorValue();
-
-                String databaseField = table.getDatabaseFieldFromColumn(table.getSelectedColumn());
-                int primaryKey = table.getPrimaryKeyForRow(table.getSelectedRow());
+                String[] fields = new String[6];
+                for (int i = 0; i < 6; i++) fields[i] = (String) filmTable.getValueAt(row, i);
 
                 try {
-                    table.update(primaryKey, databaseField, newValue);
-                } catch (SQLException ex) {
+                    filmTable.update(Film.fromRow(fields));
+                } catch (SQLException | InvalidParameterException ex) {
                     new ErrorMessage(ex.getMessage());
+                    filmTable.resetLastEdit(row, column);
                 }
             }
-        };
+        });
 
-        filmTable.getDefaultEditor(String.class).addCellEditorListener(changeNotification);
-        personeTable.getDefaultEditor(String.class).addCellEditorListener(changeNotification);
+        /* Event 7: on Persona cell update, update in database too; on error reset edit */
+        personeTable.getDefaultEditor(String.class).addCellEditorListener(new CellEditorListener() {
+            public void editingCanceled(ChangeEvent e) {}
+            public void editingStopped(ChangeEvent e) {
+                int row = personeTable.getSelectedRow();
+                int column = personeTable.getSelectedColumn();
 
-        /* Event 7: on delete button press, delete in database and in table */
+                String[] fields = new String[6];
+                for (int i = 0; i < 6; i++) fields[i] = (String) personeTable.getValueAt(row, i);
+
+                try {
+                    personeTable.update(Persona.fromRow(fields));
+                } catch (SQLException | InvalidParameterException ex) {
+                    new ErrorMessage(ex.getMessage());
+                    personeTable.resetLastEdit(row, column);
+                }
+            }
+        });
+
+        /* Event 8: on delete button press, delete in database and in table */
         deleteButton.addActionListener(e -> {
             DatabaseTable<? extends RowData> currentTable = tablesUIManager.getCurrentTable();
             int selectedRow = currentTable.getSelectedRow();

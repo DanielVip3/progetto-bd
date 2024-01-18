@@ -1,10 +1,7 @@
 package it.unisa.bd.progetto.gui.tables;
 
 import javax.swing.*;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
+import java.security.InvalidParameterException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +16,7 @@ public abstract class DatabaseTable<T extends RowData> extends JTable {
         setAutoCreateRowSorter(true);
         getTableHeader().setReorderingAllowed(false);
 
-        DefaultTableModel tableModel = new DefaultTableModel(columnsFields.keySet().toArray(), 0);
+        ValidatedTableModel tableModel = new ValidatedTableModel(columnsFields.keySet().toArray(), 0);
         setModel(tableModel);
     }
 
@@ -40,15 +37,19 @@ public abstract class DatabaseTable<T extends RowData> extends JTable {
     }
 
     public void addRow(RowData item) {
-        ((DefaultTableModel) getModel()).addRow(item.toRow());
+        ((ValidatedTableModel) getModel()).addRow(item.toRow());
     }
 
     public void removeRow(int rowIndex) {
-        ((DefaultTableModel) getModel()).removeRow(rowIndex);
+        ((ValidatedTableModel) getModel()).removeRow(rowIndex);
+    }
+
+    public void resetLastEdit(int row, int column) {
+        setValueAt(((ValidatedTableModel) getModel()).getLastValue(), row, column);
     }
 
     public void populate(List<? extends RowData> items) {
-        DefaultTableModel tableModel = (DefaultTableModel) getModel();
+        ValidatedTableModel tableModel = (ValidatedTableModel) getModel();
         tableModel.setRowCount(0);
         items.forEach(this::addRow);
     }
@@ -59,6 +60,6 @@ public abstract class DatabaseTable<T extends RowData> extends JTable {
     }
 
     public abstract int insert(T data) throws SQLException;
-    public abstract void update(int primaryKey, String field, String newValue) throws SQLException;
+    public abstract void update(T data) throws SQLException, InvalidParameterException;
     public abstract void delete(int primaryKey) throws SQLException;
 }

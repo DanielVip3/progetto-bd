@@ -6,6 +6,7 @@ import it.unisa.bd.progetto.core.Persona;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
+import java.security.InvalidParameterException;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 
@@ -13,10 +14,10 @@ public class PersoneTable extends DatabaseTable {
     public void initialize() {
         LinkedHashMap<String, String> columnFields = new LinkedHashMap<>();
         columnFields.put("Codice ID", "CodiceID");
-        columnFields.put("Tipo", "Tipo");
         columnFields.put("Nome", "Nome");
         columnFields.put("Cognome", "Cognome");
         columnFields.put("Data di nascita", "DataDiNascita");
+        columnFields.put("Tipo", "Tipo");
         columnFields.put("# premi vinti", "NumeroPremiVinti");
         columnFields.put("Matricola", "Matricola");
 
@@ -27,11 +28,12 @@ public class PersoneTable extends DatabaseTable {
 
         TableColumnModel columnModel = getColumnModel();
         columnModel.getColumn(0).setMaxWidth(75);
-        columnModel.getColumn(1).setMaxWidth(150);
+        columnModel.getColumn(1).setPreferredWidth(200);
         columnModel.getColumn(2).setPreferredWidth(200);
-        columnModel.getColumn(3).setPreferredWidth(200);
-        columnModel.getColumn(4).setPreferredWidth(125);
-        columnModel.getColumn(4).setMaxWidth(125);
+        columnModel.getColumn(3).setPreferredWidth(125);
+        columnModel.getColumn(3).setMaxWidth(125);
+        columnModel.getColumn(3).setCellRenderer(centerRenderer);
+        columnModel.getColumn(4).setMaxWidth(150);
         columnModel.getColumn(4).setCellRenderer(centerRenderer);
         columnModel.getColumn(5).setMaxWidth(125);
         columnModel.getColumn(5).setCellRenderer(centerRenderer);
@@ -43,8 +45,8 @@ public class PersoneTable extends DatabaseTable {
         return Database.insertPersona((Persona) persona);
     }
 
-    public void update(int primaryKey, String field, String newValue) throws SQLException {
-        Database.updatePersona(primaryKey, field, newValue);
+    public void update(RowData persona) throws SQLException, InvalidParameterException {
+        Database.updatePersona((Persona) persona);
     }
 
     public void delete(int primaryKey) throws SQLException {
