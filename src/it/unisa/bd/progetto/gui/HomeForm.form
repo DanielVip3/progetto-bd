@@ -78,7 +78,7 @@
                               <text value="Durata"/>
                             </properties>
                           </component>
-                          <component id="c856e" class="it.unisa.bd.progetto.gui.fields.ValidatedNumberSpinner" binding="durataTextField">
+                          <component id="c856e" class="it.unisa.bd.progetto.gui.fields.ValidatedNumberSpinner" binding="durataSpinner">
                             <constraints border-constraint="West"/>
                             <properties/>
                           </component>
@@ -102,7 +102,7 @@
                               <text value="Anno"/>
                             </properties>
                           </component>
-                          <component id="aeb6f" class="it.unisa.bd.progetto.gui.fields.ValidatedNumberSpinner" binding="annoTextField">
+                          <component id="aeb6f" class="it.unisa.bd.progetto.gui.fields.ValidatedNumberSpinner" binding="annoSpinner">
                             <constraints border-constraint="Center"/>
                             <properties/>
                           </component>
@@ -119,7 +119,7 @@
                               <text value="Età minima"/>
                             </properties>
                           </component>
-                          <component id="25ff" class="it.unisa.bd.progetto.gui.fields.ValidatedNumberSpinner" binding="etaMinimaTextField">
+                          <component id="25ff" class="it.unisa.bd.progetto.gui.fields.ValidatedNumberSpinner" binding="etaMinimaSpinner">
                             <constraints border-constraint="Center"/>
                             <properties/>
                           </component>
@@ -290,13 +290,13 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="6619" class="javax.swing.JLabel" binding="additionalPersonaPanelLabel">
+                          <component id="6619" class="javax.swing.JLabel" binding="additionalPersonaLabel">
                             <constraints border-constraint="North"/>
                             <properties>
                               <text value="Numero premi vinti"/>
                             </properties>
                           </component>
-                          <component id="766f5" class="it.unisa.bd.progetto.gui.fields.ValidatedNumberField" binding="additionalPersonaPanelTextField">
+                          <component id="766f5" class="it.unisa.bd.progetto.gui.fields.ValidatedNumberField" binding="additionalPersonaTextField">
                             <constraints border-constraint="Center"/>
                             <properties>
                               <columns value="10"/>

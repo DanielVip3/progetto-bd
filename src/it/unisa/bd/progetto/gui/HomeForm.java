@@ -1,7 +1,6 @@
 package it.unisa.bd.progetto.gui;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
-import it.unisa.bd.progetto.core.Database;
 import it.unisa.bd.progetto.core.Film;
 import it.unisa.bd.progetto.core.Persona;
 import it.unisa.bd.progetto.core.TipoPersona;
@@ -15,40 +14,33 @@ import it.unisa.bd.progetto.gui.tables.*;
 import javax.swing.*;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.TableCellEditor;
 import java.awt.*;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.security.InvalidParameterException;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.List;
 
 public class HomeForm {
     private JTabbedPane tabbedPane;
     private JPanel root;
     private ValidatedNumberField codiceTextField;
     private ValidatedTextField titoloTextField;
-    private ValidatedNumberSpinner annoTextField;
-    private ValidatedNumberSpinner durataTextField;
-    private ValidatedNumberSpinner etaMinimaTextField;
+    private ValidatedNumberSpinner annoSpinner;
+    private ValidatedNumberSpinner durataSpinner;
+    private ValidatedNumberSpinner etaMinimaSpinner;
     private JComboBox<String> registaComboBox;
     private JComboBox<String> tipoComboBox;
     private ValidatedDateField dataDiNascitaTextField;
     private ValidatedTextField cognomeTextField;
     private ValidatedTextField nomeTextField;
     private JPanel additionalPersonaPanel;
-    private JLabel additionalPersonaPanelLabel;
+    private JLabel additionalPersonaLabel;
     private JTextField searchTextField;
     private FilmTable filmTable;
     private PersoneTable personeTable;
     private JButton deleteButton;
     private JButton addFilmButton;
     private JButton addPersonaButton;
-    private ValidatedNumberField additionalPersonaPanelTextField;
+    private ValidatedNumberField additionalPersonaTextField;
 
 
     public static void main(String[] args) {
@@ -66,9 +58,9 @@ public class HomeForm {
     public HomeForm() {
         TablesUIManager tablesUIManager = new TablesUIManager(tabbedPane, new DatabaseTable[]{filmTable, personeTable}, deleteButton, registaComboBox);
 
-        annoTextField.bounds(1900, Year.now().getValue() + 10, Year.now().getValue());
-        durataTextField.bounds(1, 6000, 120);
-        etaMinimaTextField.bounds(0, 18, 0);
+        annoSpinner.bounds(1900, Year.now().getValue() + 10, Year.now().getValue());
+        durataSpinner.bounds(1, 6000, 120);
+        etaMinimaSpinner.bounds(0, 18, 0);
 
         /* Event 1: change of type in combobox changes shown additional text panel */
         tipoComboBox.addActionListener(e -> {
@@ -80,11 +72,11 @@ public class HomeForm {
             switch (type) {
                 default -> additionalPersonaPanel.setVisible(false);
                 case ARTISTA -> {
-                    additionalPersonaPanelLabel.setText("# premi vinti");
+                    additionalPersonaLabel.setText("# premi vinti");
                     additionalPersonaPanel.setVisible(true);
                 }
                 case IMPIEGATO -> {
-                    additionalPersonaPanelLabel.setText("Matricola");
+                    additionalPersonaLabel.setText("Matricola");
                     additionalPersonaPanel.setVisible(true);
                 }
             }
@@ -103,9 +95,9 @@ public class HomeForm {
         addFilmButton.addActionListener(e -> {
             String codice = codiceTextField.getText();
             String titolo = titoloTextField.getText();
-            String durata = durataTextField.getValue().toString();
-            String anno = annoTextField.getValue().toString();
-            String etaMinima = etaMinimaTextField.getValue().toString();
+            String durata = durataSpinner.getValue().toString();
+            String anno = annoSpinner.getValue().toString();
+            String etaMinima = etaMinimaSpinner.getValue().toString();
             String regista = (String) registaComboBox.getSelectedItem();
 
             try {
@@ -124,7 +116,7 @@ public class HomeForm {
             String nome = nomeTextField.getText();
             String cognome = cognomeTextField.getText();
             String dataDiNascita = dataDiNascitaTextField.getText();
-            String additionalField = additionalPersonaPanelTextField.getText();
+            String additionalField = additionalPersonaTextField.getText();
             TipoPersona tipo = TipoPersona.fromString((String) tipoComboBox.getSelectedItem());
 
             try {
