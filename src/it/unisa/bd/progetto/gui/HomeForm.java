@@ -151,19 +151,15 @@ public class HomeForm {
             }
         });
 
-        filmTable.addFocusListener(new FocusAdapter() {
+        FocusAdapter clearSelectionOnLostFocus = new FocusAdapter() {
             @Override
             public void focusLost(FocusEvent e) {
-                if (e.getOppositeComponent() == null || !e.getOppositeComponent().equals(deleteButton)) filmTable.clearSelection();
+                if (e.getOppositeComponent() == null || !e.getOppositeComponent().equals(deleteButton)) ((JTable) e.getComponent()).clearSelection();
             }
-        });
+        };
 
-        personeTable.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                if (e.getOppositeComponent() == null || !e.getOppositeComponent().equals(deleteButton)) personeTable.clearSelection();
-            }
-        });
+        filmTable.addFocusListener(clearSelectionOnLostFocus);
+        personeTable.addFocusListener(clearSelectionOnLostFocus);
 
         ListSelectionListener disableDeleteButtonIfNoSelection = e -> deleteButton.setEnabled(getCurrentTable().getSelectedRow() >= 0);
         filmTable.getSelectionModel().addListSelectionListener(disableDeleteButtonIfNoSelection);
