@@ -8,17 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Database {
-    private final static Database instance = new Database();
     private final static String uri = "jdbc:mysql://localhost:3306/progetto";
     private final static String user = "progetto";
     private final static String password = null;
     private static Connection connection;
 
-    private Database() {
+    static {
         try {
             connection = DriverManager.getConnection(uri, user, password);
         } catch(SQLException ex) {
             ex.printStackTrace();
+            System.exit(1);
         }
     }
 
@@ -51,11 +51,11 @@ public class Database {
     public static List<Film> getFilms(String search) throws SQLException {
         List<Film> films = new ArrayList<>();
 
-        PreparedStatement statement = getConnection().prepareStatement(
-        "SELECT Film.*, CONCAT(Nome, ' ', Cognome) AS NomeRegista " +
-            "FROM Film LEFT JOIN Persona ON Film.Regista = Persona.CodiceID " +
-            "WHERE titolo LIKE ?;"
-        );
+        PreparedStatement statement = getConnection().prepareStatement("""
+            SELECT Film.*, CONCAT(Nome, ' ', Cognome) AS NomeRegista\s
+            FROM Film LEFT JOIN Persona ON Film.Regista = Persona.CodiceID\s
+            WHERE titolo LIKE ?;
+        """);
         statement.setString(1, search == null || search.isEmpty() ? "%" : "%" + search + "%");
         ResultSet rs = statement.executeQuery();
 
@@ -106,10 +106,10 @@ public class Database {
     public static void insertFilm(Film film) throws SQLException, InvalidParameterException {
         Integer codiceRegista = getCodiceRegista(film.getRegista());
 
-        PreparedStatement statement = getConnection().prepareStatement(
-        "INSERT INTO Film (Codice, Titolo, Durata, Anno, EtàMinima, Regista) " +
-            "VALUES (?, ?, ?, ?, ?, ?);"
-        );
+        PreparedStatement statement = getConnection().prepareStatement("""
+            INSERT INTO Film (Codice, Titolo, Durata, Anno, EtàMinima, Regista)\s
+            VALUES (?, ?, ?, ?, ?, ?);
+        """);
 
         statement.setInt(1, film.getCodice());
         statement.setString(2, film.getTitolo());
@@ -124,11 +124,10 @@ public class Database {
     }
 
     public static int insertPersona(Persona persona) throws SQLException {
-        PreparedStatement statement = getConnection().prepareStatement(
-        "INSERT INTO Persona (Tipo, Nome, Cognome, DataDiNascita, NumeroPremiVinti, Matricola) " +
-            "VALUES (?, ?, ?, ?, ?, ?);",
-            Statement.RETURN_GENERATED_KEYS
-        );
+        PreparedStatement statement = getConnection().prepareStatement("""
+            INSERT INTO Persona (Tipo, Nome, Cognome, DataDiNascita, NumeroPremiVinti, Matricola)\s
+            VALUES (?, ?, ?, ?, ?, ?);
+        """, Statement.RETURN_GENERATED_KEYS);
 
         statement.setString(1, persona.getTipo().toString());
         statement.setString(2, persona.getNome());
@@ -153,11 +152,11 @@ public class Database {
     public static void updateFilm(Film film) throws SQLException, InvalidParameterException {
         Integer codiceRegista = getCodiceRegista(film.getRegista());
 
-        PreparedStatement statement = getConnection().prepareStatement(
-        "UPDATE Film " +
-            "SET Titolo = ?, Durata = ?, Anno = ?, EtàMinima = ?, Regista = ? " +
-            "WHERE Codice = ?;"
-        );
+        PreparedStatement statement = getConnection().prepareStatement("""
+            UPDATE Film\s
+            SET Titolo = ?, Durata = ?, Anno = ?, EtàMinima = ?, Regista = ?\s
+            WHERE Codice = ?;
+        """);
 
         statement.setString(1, film.getTitolo());
         statement.setInt(2, film.getDurata());
@@ -173,11 +172,11 @@ public class Database {
     }
 
     public static void updatePersona(Persona persona) throws SQLException {
-        PreparedStatement statement = getConnection().prepareStatement(
-        "UPDATE Persona " +
-            "SET Tipo = ?, Nome = ?, Cognome = ?, DataDiNascita = ?, NumeroPremiVinti = ?, Matricola = ? " +
-            "WHERE CodiceID = ?;"
-        );
+        PreparedStatement statement = getConnection().prepareStatement("""
+            UPDATE Persona\s
+            SET Tipo = ?, Nome = ?, Cognome = ?, DataDiNascita = ?, NumeroPremiVinti = ?, Matricola = ?\s
+            WHERE CodiceID = ?;
+        """);
 
         statement.setString(1, persona.getTipo().toString());
         statement.setString(2, persona.getNome());
