@@ -19,8 +19,7 @@ public class Persona implements RowData {
     public Persona(int codiceID, String nome, String cognome, LocalDate dataDiNascita, TipoPersona tipo, Integer additionalField) throws InvalidParameterException {
         if (codiceID < 0) throw new InvalidParameterException("Il codice inserito non è valido!");
         if (nome.isBlank() || nome.length() > 45) throw new InvalidParameterException("Il nome inserito non è valido!");
-        if (cognome.isBlank() || cognome.length() > 45)
-            throw new InvalidParameterException("Il cognome inserito non è valido!");
+        if (cognome.isBlank() || cognome.length() > 45) throw new InvalidParameterException("Il cognome inserito non è valido!");
 
         this.codiceID = codiceID;
         this.tipo = tipo;
@@ -34,14 +33,13 @@ public class Persona implements RowData {
             default -> {
             }
             case ARTISTA -> {
-                if (additionalField < 0)
-                    throw new InvalidParameterException("Il numero di premi vinti inserito non è valido!");
+                if (additionalField != null && additionalField < 0) throw new InvalidParameterException("Il numero di premi vinti inserito non è valido!");
 
                 this.numeroPremiVinti = additionalField;
                 this.matricola = null;
             }
             case IMPIEGATO -> {
-                if (additionalField < 0) throw new InvalidParameterException("La matricola inserita non è valida!");
+                if (additionalField != null && additionalField < 0) throw new InvalidParameterException("La matricola inserita non è valida!");
 
                 this.matricola = additionalField;
                 this.numeroPremiVinti = null;
@@ -71,11 +69,11 @@ public class Persona implements RowData {
         return dataDiNascita;
     }
 
-    public int getNumeroPremiVinti() {
+    public Integer getNumeroPremiVinti() {
         return numeroPremiVinti;
     }
 
-    public int getMatricola() {
+    public Integer getMatricola() {
         return matricola;
     }
 
@@ -107,14 +105,14 @@ public class Persona implements RowData {
             default -> {}
             case ARTISTA -> {
                 try {
-                    additionalField = Integer.parseInt(row[5]);
+                    if (!row[5].equals("-")) additionalField = Integer.parseInt(row[5]);
                 } catch(NumberFormatException ex) {
                     throw new InvalidParameterException("Il numero di premi vinti inserito non è valido!");
                 }
             }
             case IMPIEGATO -> {
                 try {
-                    additionalField = Integer.parseInt(row[6]);
+                    if (!row[5].equals("-"))  additionalField = Integer.parseInt(row[5]);
                 } catch(NumberFormatException ex) {
                     throw new InvalidParameterException("La matricola inserita non è valida!");
                 }

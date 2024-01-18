@@ -135,10 +135,12 @@ public class Database {
         statement.setString(3, persona.getCognome());
         statement.setDate(4, Date.valueOf(persona.getDataDiNascita()));
 
-        if (persona.getTipo() == TipoPersona.ARTISTA) statement.setInt(5, persona.getNumeroPremiVinti());
+        Integer numeroPremiVinti = persona.getNumeroPremiVinti();
+        if (persona.getTipo() == TipoPersona.ARTISTA && numeroPremiVinti != null) statement.setInt(5, numeroPremiVinti);
         else statement.setNull(5, java.sql.Types.NULL);
 
-        if (persona.getTipo() == TipoPersona.IMPIEGATO) statement.setInt(6, persona.getMatricola());
+        Integer matricola = persona.getMatricola();
+        if (persona.getTipo() == TipoPersona.IMPIEGATO && matricola != null) statement.setInt(6, persona.getMatricola());
         else statement.setNull(6, java.sql.Types.NULL);
 
         statement.execute();
