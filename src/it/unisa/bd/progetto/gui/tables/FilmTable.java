@@ -27,13 +27,15 @@ public class FilmTable extends DatabaseTable {
 
         TableColumnModel columnModel = getColumnModel();
         columnModel.getColumn(0).setMaxWidth(75);
-        columnModel.getColumn(1).setPreferredWidth(300);
+        columnModel.getColumn(1).setPreferredWidth(200);
         columnModel.getColumn(2).setMaxWidth(75);
         columnModel.getColumn(2).setCellRenderer(centerRenderer);
         columnModel.getColumn(3).setMaxWidth(75);
         columnModel.getColumn(3).setCellRenderer(centerRenderer);
         columnModel.getColumn(4).setMaxWidth(75);
         columnModel.getColumn(4).setCellRenderer(centerRenderer);
+        columnModel.getColumn(5).setPreferredWidth(150);
+        columnModel.getColumn(5).setCellRenderer(centerRenderer);
     }
 
     public int insert(RowData film) throws SQLException {
