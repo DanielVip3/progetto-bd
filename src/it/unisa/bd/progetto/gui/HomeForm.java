@@ -4,6 +4,7 @@ import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import it.unisa.bd.progetto.core.Film;
 import it.unisa.bd.progetto.core.Persona;
 import it.unisa.bd.progetto.core.TipoPersona;
+import it.unisa.bd.progetto.gui.errors.EmptyResultException;
 import it.unisa.bd.progetto.gui.errors.ErrorMessage;
 import it.unisa.bd.progetto.gui.fields.ValidatedDateField;
 import it.unisa.bd.progetto.gui.fields.ValidatedNumberField;
@@ -71,16 +72,20 @@ public class HomeForm {
 
                 try {
                     if (table instanceof FilmTable) {
-                        ((FilmTable) table).update(Film.fromRow(fields));
+                        if (((FilmTable) table).update(Film.fromRow(fields)) <= 0) {
+                            throw new EmptyResultException("l'aggiornamento.");
+                        }
 
                         if (column == 4) { // if Tipo was edited, we reset the additional fields (they were set to null in database too)
                             table.setValueAt("-", row, 5);
                             table.setValueAt("-", row, 6);
                         }
                     } else if (table instanceof PersoneTable) {
-                        ((PersoneTable) table).update(Persona.fromRow(fields));
+                        if (((PersoneTable) table).update(Persona.fromRow(fields)) <= 0) {
+                            throw new EmptyResultException("l'aggiornamento");
+                        }
                     }
-                } catch (SQLException | InvalidParameterException ex) {
+                } catch (SQLException | InvalidParameterException | EmptyResultException ex) {
                     new ErrorMessage(ex.getMessage());
                     table.resetLastEdit(row, column);
                 }
@@ -149,10 +154,10 @@ public class HomeForm {
             try {
                 // Using fromRow and not normal constructor because in this way we also do validation
                 Film film = Film.fromRow(new String[]{codice, titolo, durata, anno, etaMinima, regista});
-                filmTable.insert(film);
+                if (filmTable.insert(film) <= 0) throw new EmptyResultException("l'inserimento");
 
                 filmTable.addRow(film);
-            } catch (SQLException | InvalidParameterException ex) {
+            } catch (SQLException | InvalidParameterException | EmptyResultException ex) {
                 new ErrorMessage(ex.getMessage());
             }
         });
@@ -169,11 +174,12 @@ public class HomeForm {
                 // Using fromRow and not normal constructor because in this way we also do validation
                 Persona persona = Persona.fromRow(new String[]{"0", nome, cognome, dataDiNascita, tipo.toString(), additionalField});
                 int codiceID = personeTable.insert(persona);
+                if (codiceID < 0) throw new EmptyResultException("l'inserimento");
 
                 persona.setCodiceID(codiceID);
 
                 personeTable.addRow(persona);
-            } catch (SQLException | InvalidParameterException ex) {
+            } catch (SQLException | InvalidParameterException | EmptyResultException ex) {
                 new ErrorMessage(ex.getMessage());
             }
         });
@@ -191,9 +197,11 @@ public class HomeForm {
             if (selectedRow < 0) return;
 
             try {
-                currentTable.delete(currentTable.getPrimaryKeyForRow(selectedRow));
+                if (currentTable.delete(currentTable.getPrimaryKeyForRow(selectedRow)) <= 0) {
+                    throw new EmptyResultException("la cancellazione");
+                }
                 currentTable.removeRow(selectedRow);
-            } catch (SQLException ex) {
+            } catch (SQLException | EmptyResultException ex) {
                 new ErrorMessage(ex.getMessage());
             }
         });

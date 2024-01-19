@@ -45,11 +45,11 @@ public class PersoneTable extends DatabaseTable<Persona> {
         return Database.insertPersona(persona);
     }
 
-    public void update(Persona persona) throws SQLException, InvalidParameterException {
-        Database.updatePersona(persona);
+    public int update(Persona persona) throws SQLException, InvalidParameterException {
+        return Database.updatePersona(persona);
     }
 
-    public void delete(int primaryKey) throws SQLException {
-        Database.deletePersona(primaryKey);
+    public int delete(int primaryKey) throws SQLException {
+        return Database.deletePersona(primaryKey);
     }
 }

@@ -39,15 +39,14 @@ public class FilmTable extends DatabaseTable<Film> {
     }
 
     public int insert(Film film) throws SQLException {
-        Database.insertFilm(film);
-        return 0;
+        return Database.insertFilm(film);
     }
 
-    public void update(Film film) throws SQLException, InvalidParameterException {
-        Database.updateFilm(film);
+    public int update(Film film) throws SQLException, InvalidParameterException {
+        return Database.updateFilm(film);
     }
 
-    public void delete(int primaryKey) throws SQLException {
-        Database.deleteFilm(primaryKey);
+    public int delete(int primaryKey) throws SQLException {
+        return Database.deleteFilm(primaryKey);
     }
 }

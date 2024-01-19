@@ -61,6 +61,6 @@ public abstract class DatabaseTable<T extends RowData> extends JTable {
     }
 
     public abstract int insert(T data) throws SQLException;
-    public abstract void update(T data) throws SQLException, InvalidParameterException;
-    public abstract void delete(int primaryKey) throws SQLException;
+    public abstract int update(T data) throws SQLException, InvalidParameterException;
+    public abstract int delete(int primaryKey) throws SQLException;
 }
