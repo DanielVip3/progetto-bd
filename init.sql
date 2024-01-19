@@ -153,6 +153,7 @@ CREATE TABLE IF NOT EXISTS Biglietto (
   Data DATETIME NOT NULL,
   Persona INT UNSIGNED NOT NULL,
   Posto VARCHAR(10) NOT NULL,
+  Prezzo DOUBLE UNSIGNED NOT NULL,
   PRIMARY KEY (Cinema, Sala, Film, Persona, Data),
   FOREIGN KEY (Cinema , Sala , Film , Data)
     REFERENCES Proiezione (Cinema , Sala , Film , Data)
@@ -372,16 +373,16 @@ INSERT INTO Interpretazione (Film, Attore, Ruolo) VALUES (16968450, 22, "Max Eng
 -- -----------------------------------------------------
 -- Popolamento della tabella Biglietto
 -- -----------------------------------------------------
-INSERT INTO Biglietto (Cinema, Sala, Film, Data, Persona, Posto) VALUES (624, "Sala Enea", 6587046, "2024-02-03 11:30:00", 9, "D3");
-INSERT INTO Biglietto (Cinema, Sala, Film, Data, Persona, Posto) VALUES (624, "Sala Eventi", 7131622, "2024-02-02 16:45:00", 10, "A2");
-INSERT INTO Biglietto (Cinema, Sala, Film, Data, Persona, Posto) VALUES (187, "Sala C", 7131622, "2024-01-28 14:25:00", 9, "D12");
-INSERT INTO Biglietto (Cinema, Sala, Film, Data, Persona, Posto) VALUES (187, "Sala C", 7131622, "2024-02-03 17:50:00", 23, "C2");
-INSERT INTO Biglietto (Cinema, Sala, Film, Data, Persona, Posto) VALUES (215, "Sala 9", 4154756, "2024-02-03 10:00:00", 10, "35");
-INSERT INTO Biglietto (Cinema, Sala, Film, Data, Persona, Posto) VALUES (624, "Sala Eventi", 7131622, "2024-02-02 16:45:00", 12, "B7");
-INSERT INTO Biglietto (Cinema, Sala, Film, Data, Persona, Posto) VALUES (187, "Sala C", 7131622, "2024-01-28 14:25:00", 23, "E4");
-INSERT INTO Biglietto (Cinema, Sala, Film, Data, Persona, Posto) VALUES (187, "Sala A", 0110912, "2024-02-01 12:00:00", 24, "F10");
-INSERT INTO Biglietto (Cinema, Sala, Film, Data, Persona, Posto) VALUES (187, "Sala C", 7131622, "2024-02-03 17:50:00", 10, "A6");
-INSERT INTO Biglietto (Cinema, Sala, Film, Data, Persona, Posto) VALUES (187, "Sala C", 7131622, "2024-02-03 17:50:00", 11, "AA2");
+INSERT INTO Biglietto (Cinema, Sala, Film, Data, Persona, Posto, Prezzo) VALUES (624, "Sala Enea", 6587046, "2024-02-03 11:30:00", 9, "D3", 9.99);
+INSERT INTO Biglietto (Cinema, Sala, Film, Data, Persona, Posto, Prezzo) VALUES (624, "Sala Eventi", 7131622, "2024-02-02 16:45:00", 10, "A2", 9.99);
+INSERT INTO Biglietto (Cinema, Sala, Film, Data, Persona, Posto, Prezzo) VALUES (187, "Sala C", 7131622, "2024-01-28 14:25:00", 9, "D12", 9.99);
+INSERT INTO Biglietto (Cinema, Sala, Film, Data, Persona, Posto, Prezzo) VALUES (187, "Sala C", 7131622, "2024-02-03 17:50:00", 23, "C2", 9.99);
+INSERT INTO Biglietto (Cinema, Sala, Film, Data, Persona, Posto, Prezzo) VALUES (215, "Sala 9", 4154756, "2024-02-03 10:00:00", 10, "35", 9.99);
+INSERT INTO Biglietto (Cinema, Sala, Film, Data, Persona, Posto, Prezzo) VALUES (624, "Sala Eventi", 7131622, "2024-02-02 16:45:00", 12, "B7", 9.99);
+INSERT INTO Biglietto (Cinema, Sala, Film, Data, Persona, Posto, Prezzo) VALUES (187, "Sala C", 7131622, "2024-01-28 14:25:00", 23, "E4", 10.5);
+INSERT INTO Biglietto (Cinema, Sala, Film, Data, Persona, Posto, Prezzo) VALUES (187, "Sala A", 0110912, "2024-02-01 12:00:00", 24, "F10", 6.7);
+INSERT INTO Biglietto (Cinema, Sala, Film, Data, Persona, Posto, Prezzo) VALUES (187, "Sala C", 7131622, "2024-02-03 17:50:00", 10, "A6", 7.1);
+INSERT INTO Biglietto (Cinema, Sala, Film, Data, Persona, Posto, Prezzo) VALUES (187, "Sala C", 7131622, "2024-02-03 17:50:00", 11, "AA2", 7.1);
 
 
 -- -----------------------------------------------------
