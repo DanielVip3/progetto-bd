@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Progetto-Basi-Dati-2024:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Progetto_Basi_Dati_2024_jar</output-path>
+    <root id="archive" name="Progetto-Basi-Dati-2024.jar">
+      <element id="module-output" name="Progetto-Basi-Dati-2024" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/flatlaf-3.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/mysql-connector-j-8.3.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
