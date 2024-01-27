@@ -53,7 +53,7 @@ SELECT * FROM IncassoPerProiezione
 
 -- #7 Una selezione con operazioni insiemistiche:
 -- Seleziona tutti i film di genere "Azione" ma non "Thriller"
-SELECT F.Titolo, F.Anno, GROUP_CONCAT(GF.Genere) AS Generi FROM Film F
+SELECT F.Titolo, F.Anno FROM Film F
     JOIN GeneriFilm GF ON GF.Film = F.Codice
     WHERE GF.Genere = "Azione" AND F.Codice NOT IN (
         SELECT F.Codice FROM Film F
