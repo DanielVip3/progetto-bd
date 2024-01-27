@@ -394,6 +394,7 @@ INSERT INTO Impieghi (Persona, Cinema, Impiego) VALUES (1129571, 362, "Proiezion
 INSERT INTO Impieghi (Persona, Cinema, Impiego) VALUES (3458159, 215, "Manager");
 INSERT INTO Impieghi (Persona, Cinema, Impiego) VALUES (3458159, 187, "Manager");
 INSERT INTO Impieghi (Persona, Cinema, Impiego) VALUES (3458159, 362, "Manager");
+INSERT INTO Impieghi (Persona, Cinema, Impiego) VALUES (3458159, 624, "Manager");
 INSERT INTO Impieghi (Persona, Cinema, Impiego) VALUES (5523781, 187, "Tecnico Manutentore");
 
 COMMIT;
