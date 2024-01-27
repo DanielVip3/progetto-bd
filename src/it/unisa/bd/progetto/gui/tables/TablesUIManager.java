@@ -74,6 +74,8 @@ public class TablesUIManager {
             else if (table instanceof PersoneTable) table.populate(Database.getPersone(search));
         } catch (SQLException ex) {
             new ErrorMessage(ex.getMessage());
+        } catch (NullPointerException ex) {
+            new ErrorMessage("Il database non è stato inizializzato correttamente.", true);
         }
     }
 

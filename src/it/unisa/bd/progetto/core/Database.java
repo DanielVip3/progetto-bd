@@ -1,5 +1,7 @@
 package it.unisa.bd.progetto.core;
 
+import it.unisa.bd.progetto.gui.errors.ErrorMessage;
+
 import java.security.InvalidParameterException;
 import java.sql.*;
 import java.time.LocalDate;
@@ -25,7 +27,6 @@ public class Database {
             return DriverManager.getConnection(uri, user, password);
         } catch(SQLException ex) {
             ex.printStackTrace();
-            System.exit(1);
         }
 
         return null;
