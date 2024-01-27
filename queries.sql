@@ -33,11 +33,11 @@ SELECT F.Titolo, F.Anno, GROUP_CONCAT(GF.Genere SEPARATOR ", ") AS Generi
 -- Seleziona tutte le proiezioni e per ciascuna di esse ne calcola l'incasso, poi considera solo quelle il cui incasso è > 10
 -- Gli ultimi due join sono necessari solo a mostrare il corretto nome di persona, cinema e film ma non davvero utili ai fini del calcolo
 SELECT C.Nome AS Cinema, PR.Sala, F.Titolo AS Film, PR.Data, SUM(B.Prezzo) AS Incasso
-	FROM Biglietto B
-	NATURAL JOIN Proiezione PR
+	FROM Proiezione PR
+	NATURAL JOIN Biglietto B
     JOIN Cinema C ON PR.Cinema = C.Codice
     JOIN Film F ON PR.Film = F.Codice
-    GROUP BY PR.Cinema, PR.Sala, PR.Film, PR.Data
+    GROUP BY C.Nome, PR.Sala, F.Titolo, PR.Data
     HAVING Incasso > 10;
 
 -- #6 Una selezione aggregata su raggruppamenti con condizioni che includano un’altra funzione di raggruppamento (es. dipartimenti la cui somma degli stipendi è la più alta):

@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS Proiezione (
   Sala VARCHAR(45) NOT NULL,
   Film INT UNSIGNED NOT NULL,
   Data DATETIME NOT NULL,
-  Prezzo DOUBLE UNSIGNED NOT NULL,
+  PrezzoStandard DOUBLE UNSIGNED NOT NULL,
   PRIMARY KEY (Cinema, Sala, Film, Data),
   FOREIGN KEY (Cinema , Sala)
     REFERENCES Sala (Cinema , Nome)
@@ -333,21 +333,21 @@ INSERT INTO GeneriFilm (Film, Genere) VALUES (4154756, "Avventura");
 -- -----------------------------------------------------
 -- Popolamento della tabella Proiezione
 -- -----------------------------------------------------
-INSERT INTO Proiezione (Cinema, Sala, Film, Data, Prezzo) VALUES (215, "Sala 3", 6587046, "2024-02-02 18:20:00", 9.80);
-INSERT INTO Proiezione (Cinema, Sala, Film, Data, Prezzo) VALUES (362, "Sala 7", 0110912, "2024-02-02 18:30:00", 8.40);
-INSERT INTO Proiezione (Cinema, Sala, Film, Data, Prezzo) VALUES (362, "Sala 10", 6587046, "2024-02-04 11:45:00", 9.80);
-INSERT INTO Proiezione (Cinema, Sala, Film, Data, Prezzo) VALUES (362, "Sala 10", 6587046, "2024-02-04 15:15:00", 9.80);
-INSERT INTO Proiezione (Cinema, Sala, Film, Data, Prezzo) VALUES (362, "Sala 10", 6587046, "2024-02-04 19:00:00", 9.80);
-INSERT INTO Proiezione (Cinema, Sala, Film, Data, Prezzo) VALUES (187, "Sala A", 0110912, "2024-02-01 12:00:00", 9.99);
-INSERT INTO Proiezione (Cinema, Sala, Film, Data, Prezzo) VALUES (187, "Sala C", 7131622, "2024-01-28 14:25:00", 9.99);
-INSERT INTO Proiezione (Cinema, Sala, Film, Data, Prezzo) VALUES (187, "Sala A+", 16968450, "2024-01-28 14:25:00", 9.99);
-INSERT INTO Proiezione (Cinema, Sala, Film, Data, Prezzo) VALUES (187, "Sala C", 7131622, "2024-02-03 17:50:00", 9.99);
-INSERT INTO Proiezione (Cinema, Sala, Film, Data, Prezzo) VALUES (215, "Sala 5", 7131622, "2024-02-03 14:20:00", 10.50);
-INSERT INTO Proiezione (Cinema, Sala, Film, Data, Prezzo) VALUES (215, "Sala 9", 4154756, "2024-02-03 10:00:00", 10.50);
-INSERT INTO Proiezione (Cinema, Sala, Film, Data, Prezzo) VALUES (624, "Sala Enea", 6587046, "2024-02-03 11:30:00", 6.70);
-INSERT INTO Proiezione (Cinema, Sala, Film, Data, Prezzo) VALUES (624, "Sala Eventi", 7131622, "2024-02-02 16:45:00", 7.10);
-INSERT INTO Proiezione (Cinema, Sala, Film, Data, Prezzo) VALUES (624, "Sala Enea", 16968450, "2024-02-02 09:30:00", 6.70);
-INSERT INTO Proiezione (Cinema, Sala, Film, Data, Prezzo) VALUES (624, "Sala Eventi", 7131622, "2024-02-02 20:30:00", 7.20);
+INSERT INTO Proiezione (Cinema, Sala, Film, Data, PrezzoStandard) VALUES (215, "Sala 3", 6587046, "2024-02-02 18:20:00", 9.80);
+INSERT INTO Proiezione (Cinema, Sala, Film, Data, PrezzoStandard) VALUES (362, "Sala 7", 0110912, "2024-02-02 18:30:00", 8.40);
+INSERT INTO Proiezione (Cinema, Sala, Film, Data, PrezzoStandard) VALUES (362, "Sala 10", 6587046, "2024-02-04 11:45:00", 9.80);
+INSERT INTO Proiezione (Cinema, Sala, Film, Data, PrezzoStandard) VALUES (362, "Sala 10", 6587046, "2024-02-04 15:15:00", 9.80);
+INSERT INTO Proiezione (Cinema, Sala, Film, Data, PrezzoStandard) VALUES (362, "Sala 10", 6587046, "2024-02-04 19:00:00", 9.80);
+INSERT INTO Proiezione (Cinema, Sala, Film, Data, PrezzoStandard) VALUES (187, "Sala A", 0110912, "2024-02-01 12:00:00", 9.99);
+INSERT INTO Proiezione (Cinema, Sala, Film, Data, PrezzoStandard) VALUES (187, "Sala C", 7131622, "2024-01-28 14:25:00", 9.99);
+INSERT INTO Proiezione (Cinema, Sala, Film, Data, PrezzoStandard) VALUES (187, "Sala A+", 16968450, "2024-01-28 14:25:00", 9.99);
+INSERT INTO Proiezione (Cinema, Sala, Film, Data, PrezzoStandard) VALUES (187, "Sala C", 7131622, "2024-02-03 17:50:00", 9.99);
+INSERT INTO Proiezione (Cinema, Sala, Film, Data, PrezzoStandard) VALUES (215, "Sala 5", 7131622, "2024-02-03 14:20:00", 10.50);
+INSERT INTO Proiezione (Cinema, Sala, Film, Data, PrezzoStandard) VALUES (215, "Sala 9", 4154756, "2024-02-03 10:00:00", 10.50);
+INSERT INTO Proiezione (Cinema, Sala, Film, Data, PrezzoStandard) VALUES (624, "Sala Enea", 6587046, "2024-02-03 11:30:00", 6.70);
+INSERT INTO Proiezione (Cinema, Sala, Film, Data, PrezzoStandard) VALUES (624, "Sala Eventi", 7131622, "2024-02-02 16:45:00", 7.10);
+INSERT INTO Proiezione (Cinema, Sala, Film, Data, PrezzoStandard) VALUES (624, "Sala Enea", 16968450, "2024-02-02 09:30:00", 6.70);
+INSERT INTO Proiezione (Cinema, Sala, Film, Data, PrezzoStandard) VALUES (624, "Sala Eventi", 7131622, "2024-02-02 20:30:00", 7.20);
 
 
 -- -----------------------------------------------------
