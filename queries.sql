@@ -1,7 +1,7 @@
 -- #1 Una selezione ordinata su un attributo di una tabella con condizioni AND e OR:
 -- Seleziona in ordine di durata tutti i film che non siano VM18 i quali sono anche o cortometraggi o usciti dopo il 2000
 SELECT * FROM Film
-    WHERE (ANNO > 2000 OR Durata < 100) AND EtàMinima <> 18
+    WHERE (Anno > 2000 OR Durata < 100) AND EtàMinima <> 18
     ORDER BY Durata ASC;
 
 -- #2 Una selezione su due o più tabelle con condizioni:
@@ -32,24 +32,24 @@ SELECT F.Titolo, F.Anno, GROUP_CONCAT(GF.Genere SEPARATOR ", ") AS Generi
 -- #5 Una selezione aggregata su raggruppamenti con condizioni (es. dipartimenti la cui somma degli stipendi dei dipendenti è > 100k):
 -- Seleziona tutte le proiezioni e per ciascuna di esse ne calcola l'incasso, poi considera solo quelle il cui incasso è > 10
 -- Gli ultimi due join sono necessari solo a mostrare il corretto nome di persona, cinema e film ma non davvero utili ai fini del calcolo
-SELECT C.Nome AS Cinema, Pr.Sala, F.Titolo AS Film, Pr.Data, SUM(B.Prezzo) AS Incasso
+SELECT C.Nome AS Cinema, PR.Sala, F.Titolo AS Film, PR.Data, SUM(B.Prezzo) AS Incasso
 	FROM Biglietto B
-	NATURAL JOIN Proiezione Pr
-    JOIN Cinema C ON Pr.Cinema = C.Codice
-    JOIN Film F ON Pr.Film = F.Codice
-    GROUP BY Pr.Cinema, Pr.Sala, Pr.Film, Pr.Data
+	NATURAL JOIN Proiezione PR
+    JOIN Cinema C ON PR.Cinema = C.Codice
+    JOIN Film F ON PR.Film = F.Codice
+    GROUP BY PR.Cinema, PR.Sala, PR.Film, PR.Data
     HAVING Incasso > 10;
 
 -- #6 Una selezione aggregata su raggruppamenti con condizioni che includano un’altra funzione di raggruppamento (es. dipartimenti la cui somma degli stipendi è la più alta):
 -- Seleziona le proiezioni con il massimo incasso
 CREATE OR REPLACE VIEW IncassoPerProiezione AS
-    SELECT Pr.Cinema, Pr.Sala, Pr.Film, Pr.Data, SUM(B.Prezzo) AS Incasso
+    SELECT PR.Cinema, PR.Sala, PR.Film, PR.Data, SUM(B.Prezzo) AS Incasso
     FROM Biglietto B
-    NATURAL JOIN Proiezione Pr
-    GROUP BY Pr.Cinema, Pr.Sala, Pr.Film, Pr.Data;
+    NATURAL JOIN Proiezione PR
+    GROUP BY PR.Cinema, PR.Sala, PR.Film, PR.Data;
 
-SELECT * FROM IncassiPerProiezione
-   WHERE Incasso = (SELECT MAX(Incasso) FROM IncassiPerProiezione);
+SELECT * FROM IncassoPerProiezione
+   WHERE Incasso = (SELECT MAX(Incasso) FROM IncassoPerProiezione);
 
 -- #7 Una selezione con operazioni insiemistiche:
 -- Seleziona tutti i film di genere "Azione" ma non "Thriller"
