@@ -1,0 +1,1 @@
+java -DURI="jdbc:mysql://localhost:3306/progetto" -DUSER=progetto -jar ./out/artifacts/Progetto_Basi_Dati_2024_jar/Progetto-Basi-Dati-2024.jar

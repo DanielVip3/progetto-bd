@@ -10,11 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Database {
-    private final static String uri = "jdbc:mysql://localhost:3306/progetto";
-    private final static String user = "progetto";
+    private final static String uri = System.getProperty("URI");
+    private final static String user = System.getProperty("USER");
     private final static String password = null;
 
-    static { // looking if MySQL jdbc driver is available
+    static { // looking if env variables are there and MySQL jdbc driver is available
+        if (uri.isBlank() || user.isBlank()) {
+            System.err.println("Specifica le proprietà di sistema correttamente (uri e utente).");
+            System.exit(1);
+        }
+
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch(ClassNotFoundException ex) {
