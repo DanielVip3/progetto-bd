@@ -1,7 +1,5 @@
 package it.unisa.bd.progetto.core;
 
-import it.unisa.bd.progetto.gui.errors.ErrorMessage;
-
 import java.security.InvalidParameterException;
 import java.sql.*;
 import java.time.LocalDate;
@@ -31,7 +29,7 @@ public class Database {
         try {
             return DriverManager.getConnection(uri, user, password);
         } catch(SQLException ex) {
-            ex.printStackTrace();
+            ex.printStackTrace(System.err);
         }
 
         return null;
@@ -42,6 +40,8 @@ public class Database {
 
         if (!regista.equals("Sconosciuto")) {
             try (Connection conn = getConnection()) {
+                if (conn == null) return codiceRegista;
+
                 PreparedStatement statement = conn.prepareStatement("SELECT CodiceID From Persona WHERE CONCAT(Nome, ' ', Cognome) = ?");
                 statement.closeOnCompletion();
                 statement.setString(1, regista);
@@ -63,6 +63,8 @@ public class Database {
         List<Film> films = new ArrayList<>();
 
         try (Connection conn = getConnection()) {
+            if (conn == null) return films;
+
             PreparedStatement statement = conn.prepareStatement("""
                 SELECT Film.*, CONCAT(Nome, ' ', Cognome) AS NomeRegista\s
                 FROM Film LEFT JOIN Persona ON Film.Regista = Persona.CodiceID\s
@@ -93,6 +95,8 @@ public class Database {
         List<Persona> persone = new ArrayList<>();
 
         try (Connection conn = getConnection()) {
+            if (conn == null) return persone;
+
             PreparedStatement statement = conn.prepareStatement("SELECT * FROM Persona WHERE CONCAT(nome, ' ', cognome) LIKE ?;");
             statement.closeOnCompletion();
             statement.setString(1, search == null || search.isEmpty() ? "%" : "%" + search + "%");
@@ -122,6 +126,8 @@ public class Database {
         Integer codiceRegista = getCodiceRegista(film.getRegista());
 
         try (Connection conn = getConnection()) {
+            if (conn == null) return 0;
+
             PreparedStatement statement = conn.prepareStatement("""
                 INSERT INTO Film (Codice, Titolo, Durata, Anno, EtàMinima, Regista)\s
                 VALUES (?, ?, ?, ?, ?, ?);
@@ -146,6 +152,8 @@ public class Database {
     */
     public static int insertPersona(Persona persona) throws SQLException {
         try (Connection conn = getConnection()) {
+            if (conn == null) return -1;
+
             PreparedStatement statement = conn.prepareStatement("""
                 INSERT INTO Persona (Tipo, Nome, Cognome, DataDiNascita, NumeroPremiVinti, Matricola)\s
                 VALUES (?, ?, ?, ?, ?, ?);
@@ -177,6 +185,8 @@ public class Database {
         Integer codiceRegista = getCodiceRegista(film.getRegista());
 
         try (Connection conn = getConnection()) {
+            if (conn == null) return 0;
+
             PreparedStatement statement = conn.prepareStatement("""
                 UPDATE Film\s
                 SET Titolo = ?, Durata = ?, Anno = ?, EtàMinima = ?, Regista = ?\s
@@ -199,6 +209,8 @@ public class Database {
 
     public static int updatePersona(Persona persona) throws SQLException {
         try (Connection conn = getConnection()) {
+            if (conn == null) return 0;
+
             PreparedStatement statement = conn.prepareStatement("""
                 UPDATE Persona\s
                 SET Tipo = ?, Nome = ?, Cognome = ?, DataDiNascita = ?, NumeroPremiVinti = ?, Matricola = ?\s
@@ -226,6 +238,8 @@ public class Database {
 
     public static int deleteFilm(int codice) throws SQLException {
         try (Connection conn = getConnection()) {
+            if (conn == null) return 0;
+
             try (PreparedStatement statement = conn.prepareStatement("DELETE FROM Film WHERE Codice = ?;")) {
                 statement.setInt(1, codice);
 
@@ -236,6 +250,8 @@ public class Database {
 
     public static int deletePersona(int codiceID) throws SQLException {
         try (Connection conn = getConnection()) {
+            if (conn == null) return 0;
+
             try (PreparedStatement statement = conn.prepareStatement("DELETE FROM Persona WHERE CodiceID = ?;")) {
                 statement.setInt(1, codiceID);
 
