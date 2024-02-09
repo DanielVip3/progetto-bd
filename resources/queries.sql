@@ -13,7 +13,7 @@ SELECT F.Codice, F.Titolo, F.Anno, F.Durata, F.EtàMinima, CONCAT(P.Nome, " ", P
 
 -- #3 Una selezione aggregata su tutti i valori (es. somma di tutti gli stipendi):
 -- Mostra il numero medio di premi vinti calcolato su tutti gli artisti presenti
-SELECT AVG(NumeroPremiVinti) FROM Persona;
+SELECT ROUND(AVG(NumeroPremiVinti), 2) FROM Persona;
 
 -- #4 Una selezione aggregata su raggruppamenti (es. somma stipendi per dipartimenti):
 -- Seleziona tutti i cinema e per ciascuno di essi mostra il numero totale di posti presenti
@@ -32,7 +32,7 @@ SELECT F.Titolo, F.Anno, GROUP_CONCAT(GF.Genere SEPARATOR ", ") AS Generi
 -- #5 Una selezione aggregata su raggruppamenti con condizioni (es. dipartimenti la cui somma degli stipendi dei dipendenti è > 100k):
 -- Seleziona tutte le proiezioni e per ciascuna di esse ne calcola l'incasso, poi considera solo quelle il cui incasso è > 10
 -- Gli ultimi due join sono necessari solo a mostrare il corretto nome di persona, cinema e film ma non davvero utili ai fini del calcolo
-SELECT C.Nome AS Cinema, PR.Sala, F.Titolo AS Film, PR.Data, SUM(B.Prezzo) AS Incasso
+SELECT C.Nome AS Cinema, PR.Sala, F.Titolo AS Film, PR.Data, ROUND(SUM(B.Prezzo), 2) AS Incasso
 	FROM Proiezione PR
 	NATURAL JOIN Biglietto B
     JOIN Cinema C ON PR.Cinema = C.Codice
@@ -43,7 +43,7 @@ SELECT C.Nome AS Cinema, PR.Sala, F.Titolo AS Film, PR.Data, SUM(B.Prezzo) AS In
 -- #6 Una selezione aggregata su raggruppamenti con condizioni che includano un’altra funzione di raggruppamento (es. dipartimenti la cui somma degli stipendi è la più alta):
 -- Seleziona le proiezioni con il massimo incasso
 CREATE OR REPLACE VIEW IncassoPerProiezione AS
-    SELECT PR.Cinema, PR.Sala, PR.Film, PR.Data, SUM(B.Prezzo) AS Incasso
+    SELECT PR.Cinema, PR.Sala, PR.Film, PR.Data, ROUND(SUM(B.Prezzo), 2) AS Incasso
     FROM Biglietto B
     NATURAL JOIN Proiezione PR
     GROUP BY PR.Cinema, PR.Sala, PR.Film, PR.Data;
